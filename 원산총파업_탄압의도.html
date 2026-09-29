@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일제는 왜 원산총파업을 끝까지 탄압했는가</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFE9DA; --paper-card:#FBF8F0; --ink:#20242B; --ink-soft:#4A4F58;
+    --indigo:#2B3A55; --indigo-soft:#DCE3EC;
+    --crimson:#7A2331; --crimson-soft:#EFDBDD;
+    --brass:#93701F; --brass-soft:#EDE1C2;
+    --line:#D3C9AE; --line-strong:#B8AB88;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper);
+    background-image: radial-gradient(circle at 10% 5%, rgba(147,112,31,0.05), transparent 40%), radial-gradient(circle at 90% 15%, rgba(43,58,85,0.05), transparent 40%);
+    color:var(--ink); font-family:'Noto Sans KR', sans-serif; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,h4{ font-family:'Noto Serif KR', serif; margin:0; color:var(--ink); }
+  .wrap{max-width:960px; margin:0 auto; padding:56px 24px 100px;}
+  .kicker{ font-size:14px; color:var(--ink-soft); margin-bottom:14px; }
+  .kicker span{color:var(--brass); font-weight:700;}
+  h1{ font-size:clamp(26px,4vw,36px); font-weight:700; line-height:1.35; max-width:13em; }
+  p.lead{ margin-top:18px; font-size:16px; color:var(--ink-soft); max-width:680px; }
+  .hint{ margin-top:10px; font-size:13.5px; color:var(--brass); }
+
+  /* 찬찬히 읽기 섹션 */
+  .read-slowly{
+    margin-top:40px; padding:34px 40px; background:var(--paper-card);
+    border-left:4px solid var(--brass); max-width:680px;
+  }
+  .read-slowly .read-label{
+    font-family:'Noto Serif KR', serif; font-weight:700; font-size:14px;
+    color:var(--brass); margin-bottom:16px;
+  }
+  .read-slowly p{
+    font-family:'Noto Serif KR', serif; font-size:16.5px; line-height:2.05;
+    color:var(--ink); margin:0 0 24px; letter-spacing:-0.1px;
+    text-indent: 1em;   
+  }
+  .read-slowly p:last-child{margin-bottom:0;}
+
+  .flow{ display:flex; align-items:stretch; gap:0; margin-top:44px; flex-wrap:wrap; }
+  .flow-node{
+    flex:1; min-width:190px; background:var(--paper-card); border:2px solid var(--line-strong);
+    padding:20px 18px; cursor:pointer; text-align:left; font-family:inherit;
+    transition: border-color .2s ease, transform .15s ease, box-shadow .2s ease;
+  }
+  .flow-node:hover{ border-color:var(--brass); transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,0.08); }
+  .flow-node:focus-visible{ outline:3px solid var(--indigo); outline-offset:2px; }
+  .node-num{ font-family:'Noto Serif KR', serif; font-size:13px; color:var(--paper-card); background:var(--ink); display:inline-block; padding:2px 9px; border-radius:3px; margin-bottom:10px; }
+  .node-title{ font-family:'Noto Serif KR', serif; font-weight:700; font-size:16.5px; margin-bottom:8px; line-height:1.4; }
+  .node-desc{ font-size:13.5px; color:var(--ink-soft); }
+  .flow-arrow{ display:flex; align-items:center; justify-content:center; width:36px; flex-shrink:0; color:var(--line-strong); font-size:20px; }
+  @media (max-width:760px){ .flow{flex-direction:column;} .flow-arrow{width:auto; height:28px; transform:rotate(90deg);} .read-slowly{padding:26px 22px;} }
+
+  .result-strip{ margin-top:28px; background:var(--ink); color:var(--paper-card); padding:16px 22px; font-size:14px; text-align:center; }
+  .result-strip b{color:var(--brass-soft);}
+
+  /* 팝업 */
+  .overlay{ position:fixed; inset:0; background:rgba(32,36,43,0.55); display:none; align-items:center; justify-content:center; z-index:100; padding:20px; }
+  .overlay.open{ display:flex; }
+  .modal{ background:var(--paper-card); max-width:560px; width:100%; max-height:85vh; overflow-y:auto; border-top:5px solid var(--brass); }
+  .modal-head{ padding:22px 26px 14px; border-bottom:1px solid var(--line-strong); }
+  .modal-head .node-num{ margin-bottom:8px; }
+  .modal-head h3{ font-size:19px; line-height:1.4; }
+  .modal-body{ padding:20px 26px 26px; }
+  .sec-label{ font-family:'Noto Serif KR', serif; font-weight:700; font-size:13.5px; margin:0 0 8px; display:flex; align-items:center; gap:7px; }
+  .sec-label.fact{ color:var(--indigo); }
+  .sec-label.infer{ color:var(--crimson); }
+  .sec-label .dot{ width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .sec-label.fact .dot{ background:var(--indigo); }
+  .sec-label.infer .dot{ background:var(--crimson); }
+  ul.pop-list{ margin:0 0 22px; padding-left:20px; font-size:14px; }
+  ul.pop-list.infer{ font-style:italic; color:var(--ink-soft); }
+  ul.pop-list li{ margin-bottom:6px; }
+  .modal-close{ position:sticky; top:0; float:right; margin:14px 14px 0 0; background:var(--ink); color:var(--paper-card); border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:15px; }
+  .modal-close:hover{ background:var(--crimson); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="kicker"><span>1920년대 민족 운동</span> · 원산 노동자 총파업(1929)</div>
+  <h1>일제는 왜 원산총파업을 '끝까지' 탄압하려 했는가</h1>
+  <p class="lead">원산총파업은 임금 문제로 시작됐지만, 일제가 이를 대하는 태도는 일반적인 노사 분쟁 진압 수준을 넘어섰다. 표면의 이유 아래에 겹겹이 쌓인 네 층위의 의도를 따라가 본다.</p>
+
+  <div class="read-slowly">
+    <p class="read-label">찬찬히 읽어보기</p>
+    <p>1928년 9월, 함경남도 원산 인근 문평의 라이징 선 석유회사 공장에서 일본인 감독 고타마가 한국인 노동자를 구타한 사건이 발단이 되어, 이듬해 1929년 1월 13일 원산노동연합회는 감독 파면과 최저임금제·8시간 노동제 실시 등을 요구하며 총파업을 선언했는데, 이때 원산노련에 속한 노동자 약 2,000여 명이 한꺼번에 움직였다는 사실만으로도 조선총독부와 원산상업회의소는 이 사태를 단순한 임금 협상 이상의 문제로 받아들일 수밖에 없었다. 만약 이 요구가 순순히 받아들여진다면, 원산 한 지역의 노사 관계가 바뀌는 데서 그치지 않고 한국 전역의 일본인·외국계 자본이 노동자에게 협상력을 내어주는 선례가 될 수 있었기 때문에, 원산상업회의소는 교섭에 나서는 대신 원산노련 소속 노동자를 아예 고용하지 않겠다고 선언하며 힘으로 밀어붙이는 쪽을 택했다.</p>
+    <p>그런데 조선총독부와 자본가 측이 진짜로 두려워한 것은 이 파업 자체가 아니라, 54개 가맹단체와 약 2,000여 명을 하나로 묶어 낸 '원산노동연합회'라는 연합 조직의 존재 그 자체였다고 볼 수 있다. 이 짐작을 뒷받침하는 것은 파업이 끝나가던 시점의 대응 방식인데, 원산상의는 원산노련을 대신할 어용 조직인 함남노동회를 새로 세워 그곳에 소속된 노동자만 고용하겠다고 발표했고, 조선총독부 경찰은 원산노련 산하 조직을 수색하고 지도부를 체포하는 등 조직 자체를 정조준한 탄압을 이어갔으며, 그 결과 원산노련은 1929년 4월 6일 파업을 포기한 데 이어 4월 21일 완전히 해체되고 말았다. 이는 파업 하나를 진압하는 데서 그치지 않고, 여러 사업장을 가로질러 노동자를 결속시키는 '연합'이라는 방식 자체가 재현되지 못하도록 뿌리째 뽑으려 한 것으로 읽을 수 있다.</p>
+    <p>여기에 더해, 조선총독부는 이 사태를 단순한 치안 문제로만 다루지 않았다. 파업 기간 동안 경찰은 규찰대원들을 폭행·협박 혐의로 다수 검거했을 뿐 아니라, 일본군 제19사단 함흥보병대 병력까지 훈련을 명목으로 무장한 채 원산 시내를 행진시켜 공포 분위기를 조성했는데, 노동조합의 임금 협상에 군대까지 동원했다는 사실은 이 파업을 계급 운동, 나아가 식민 지배 자체를 흔들 수 있는 정치적 위협으로 간주했음을 짐작하게 한다.</p>
+    <p>마지막으로, 원산총파업은 식민지 한국의 국경을 넘어 중국·프랑스·블라디보스토크의 노동 단체로부터 격려 전문과 투쟁 자금을 받았고, 심지어 일본 고베와 홋카이도의 라이징 선 계열 일본인 노동자들까지 동조 파업을 벌였을 정도로 국제적인 주목을 받은 사건이었다. 1929년 1월 13일부터 4월 6일까지 약 80여 일에 걸쳐 이어진 이 파업이 길어질수록, 식민지 한국의 열악한 노동 실태와 총독부의 억압적인 대응 방식이 국제 여론에 그대로 노출될 위험도 함께 커졌을 것이므로, 조선총독부가 경찰과 군대를 동시에 투입해 사태를 서둘러 마무리 지으려 한 데는 이 국제적 파장을 최소화하려는 계산도 있었으리라고 추정해 볼 수 있다.</p>
+  </div>
+
+  <p class="hint">아래 단계를 클릭하면 각 층위의 근거가 되는 사실과, 그로부터 읽을 수 있는 해석을 구분해 다시 보여준다.</p>
+
+  <div class="flow" id="flow"></div>
+
+  <div class="result-strip">네 층위가 겹치며 일제는 파업 종료 이후에도 <b>원산노련 자체를 해체</b>시키는 방향으로 탄압을 이어갔다.</div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <button class="modal-close" id="closeBtn" aria-label="닫기">✕</button>
+    <div class="modal-head">
+      <div class="node-num" id="mNum"></div>
+      <h3 id="mTitle"></h3>
+    </div>
+    <div class="modal-body">
+      <p class="sec-label fact"><span class="dot"></span>확정 사실</p>
+      <ul class="pop-list fact" id="mFact"></ul>
+      <p class="sec-label infer"><span class="dot"></span>해석 (추정)</p>
+      <ul class="pop-list infer" id="mInfer"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const nodes = [
+  {
+    num: "1층위",
+    title: "표면적 이유 — 자본의 노무 관리권 보호",
+    desc: "발단이 된 폭행 사건과 사측의 거부",
+    fact: [
+      "1928년 9월 문평 라이징 선 석유회사 일본인 감독 고타마가 한국인 노동자를 구타한 사건이 발단",
+      "1929년 1월 13일 원산노동연합회(원산노련)가 감독 파면·최저임금제·8시간 노동제 등을 요구하며 총파업 선언, 원산노련 소속 노동자 약 2,000여 명이 참여",
+      "원산상업회의소(사측 대표 단체)는 교섭 대신 원산노련 소속 노동자를 아예 고용하지 않겠다고 선언",
+      "조선총독부 경찰은 파업 초기부터 소비조합 장부 압수, 조합 사무실 수색 등으로 개입"
+    ],
+    infer: [
+      "이 요구를 수용하면 한국 내 일본인·외국계 자본 전반의 노무 관리 관행이 흔들릴 것을 우려했을 가능성",
+      "원산이라는 한 지역의 노사 분쟁으로 국한하지 않고, 한국 전역 사업장에 미칠 파급까지 계산했을 것으로 추정"
+    ]
+  },
+  {
+    num: "2층위",
+    title: "조직 모델 자체에 대한 위협 인식",
+    desc: "'원산노련'이라는 연합 방식 자체를 겨냥",
+    fact: [
+      "파업을 이끈 주체는 개별 사업장 노조가 아니라 54개 가맹단체·약 2,000여 명을 아우른 연합 조직 '원산노동연합회'",
+      "원산상의는 원산노련을 대신할 어용 조직 '함남노동회'를 세워 그 소속 노동자만 고용하겠다고 발표",
+      "조선총독부 경찰은 원산노련 산하 조직을 수색하고 지도부를 체포하는 등 조직 자체를 겨냥한 탄압을 지속",
+      "원산노련은 1929년 4월 6일 파업을 포기하고 4월 21일 정식 해체됨"
+    ],
+    infer: [
+      "일제와 자본가 측의 목표는 이번 파업 진압을 넘어, 여러 사업장을 하나로 묶는 '연합' 조직 방식 자체를 무력화하는 데 있었을 가능성",
+      "파업 종료 이후에도 조직을 완전히 해체시킨 결과는, 향후 유사한 지역 연대 파업이 재현되는 것 자체를 막으려는 의도로 읽을 수 있음"
+    ]
+  },
+  {
+    num: "3층위",
+    title: "사상적 연결 차단",
+    desc: "노동 문제가 민족 운동으로 번지는 것을 경계",
+    fact: [
+      "1920년대 후반 한국의 노동운동은 사회주의 계열 활동가·조직과 연계되며 확산되고 있었음",
+      "조선총독부는 치안유지법 등을 통해 사회주의 계열 조직 활동을 지속적으로 단속",
+      "파업 기간 중 경찰은 규찰대원 등을 폭행·협박 혐의로 다수 검거",
+      "일본군 제19사단 함흥보병대 병력이 훈련을 명목으로 무장한 채 원산 시내를 행진"
+    ],
+    infer: [
+      "원산노련 지도부의 구체적 정치 성향과 별개로, 일제는 노동쟁의가 계급 운동을 매개로 식민 지배 자체에 대한 저항, 즉 민족 운동과 결합할 가능성을 경계했을 것으로 보임",
+      "경찰뿐 아니라 군대까지 동원한 것은, 이를 단순 노사 문제가 아니라 치안·사상 문제로 규정했음을 시사"
+    ]
+  },
+  {
+    num: "4층위",
+    title: "국제적 확산 차단",
+    desc: "해외 연대로 국제 여론에 노출되는 것을 우려",
+    fact: [
+      "파업 기간 중 중국·프랑스·블라디보스토크의 노동 단체로부터 격려 전문과 투쟁 자금이 전달됨",
+      "일본 고베·홋카이도의 라이징 선 계열 일본인 노동자들도 동조 파업을 벌임",
+      "원산 인근 농민들도 땔감 1,000여 단을 지원하는 등 지역 사회 전반이 파업에 연대",
+      "파업은 1929년 1월 13일부터 4월 6일까지 약 80여 일간 지속되며 국내외의 주목을 받음"
+    ],
+    infer: [
+      "파업이 길어지고 국제적 연대가 확산될수록 한국의 노동 실태와 식민 통치의 억압적 성격이 국제 여론에 노출될 위험이 커짐",
+      "일제는 이러한 확산을 조기에 차단하고 사건을 지역적·일시적 문제로 축소시키려 했을 가능성"
+    ]
+  }
+];
+
+const flow = document.getElementById('flow');
+nodes.forEach((n, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'flow-node';
+  btn.innerHTML = `<div class="node-num">${n.num}</div><div class="node-title">${n.title}</div><div class="node-desc">${n.desc}</div>`;
+  btn.addEventListener('click', () => openModal(n));
+  flow.appendChild(btn);
+  if (i < nodes.length - 1) {
+    const arrow = document.createElement('div');
+    arrow.className = 'flow-arrow';
+    arrow.textContent = '→';
+    flow.appendChild(arrow);
+  }
+});
+
+const overlay = document.getElementById('overlay');
+function openModal(n){
+  document.getElementById('mNum').textContent = n.num;
+  document.getElementById('mTitle').textContent = n.title;
+  document.getElementById('mFact').innerHTML = n.fact.map(f => `<li>${f}</li>`).join('');
+  document.getElementById('mInfer').innerHTML = n.infer.map(f => `<li>${f}</li>`).join('');
+  overlay.classList.add('open');
+}
+document.getElementById('closeBtn').addEventListener('click', () => overlay.classList.remove('open'));
+overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+</script>
+</body>
+</html>

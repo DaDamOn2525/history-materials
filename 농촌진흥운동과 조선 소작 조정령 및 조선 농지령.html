@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>농촌진흥운동(1932~1939) - 역사 탐구 웹 애플리케이션</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Noto Sans KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#121316',
+                        cardbg: '#1E2026',
+                        cardborder: '#2A2D35',
+                        morningyellow: '#F3C93E', // 모닝 옐로우 (Morning Yellow)
+                        clouddancer: '#F0EEE9',   // 클라우드 댄서 (Cloud Dancer, PANTONE 11-4201)
+                        subtext: '#A0AEC0',
+                        blueaccent: '#64B5F6',
+                        redaccent: '#EF4444'
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans KR', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #121316;
+            color: #F0EEE9; /* Cloud Dancer */
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121316;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A2D35;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F3C93E;
+        }
+
+        /* Responsive Timeline Connector */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 3px;
+            background: linear-gradient(180deg, #F3C93E 0%, #64B5F6 50%, #EF4444 100%);
+            border-radius: 2px;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-container::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Interactive Card Style */
+        .interactive-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #2A2D35;
+        }
+        .interactive-card:hover {
+            transform: translateY(-4px);
+            border-color: #F3C93E;
+            box-shadow: 0 10px 25px -5px rgba(243, 201, 62, 0.15);
+        }
+
+        /* Modal Transitions */
+        .modal-backdrop {
+            transition: opacity 0.25s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+        }
+
+        .pulse-yellow {
+            box-shadow: 0 0 0 0 rgba(243, 201, 62, 0.7);
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0 rgba(243, 201, 62, 0.5); }
+            70% { box-shadow: 0 0 0 10px rgba(243, 201, 62, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(243, 201, 62, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-morningyellow selection:text-black">
+
+    <header class="sticky top-0 z-40 bg-darkbg/90 backdrop-blur-md border-b border-cardborder">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="bg-morningyellow text-black font-extrabold text-xs px-2.5 py-1 rounded tracking-wide uppercase">역사 탐구</span>
+                <h1 class="text-lg md:text-xl font-bold text-white tracking-tight">농촌진흥운동 <span class="text-morningyellow text-sm md:text-base font-normal">(1932~1939)</span></h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 w-full flex-grow space-y-12">
+
+        <section class="bg-cardbg rounded-2xl p-6 md:p-10 border border-cardborder relative overflow-hidden shadow-xl">
+            <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-morningyellow/5 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="max-w-3xl space-y-4 relative z-10">
+                <div class="inline-flex items-center space-x-2 bg-morningyellow/10 border border-morningyellow/30 text-morningyellow text-xs font-semibold px-3 py-1 rounded-full">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>일제 강점기 관제 농촌 통제 운동</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                    '자력갱생'의 탈을 쓴 <br class="hidden sm:inline">
+                    <span class="text-morningyellow">관제 통제와 전시 수탈</span>의 실상
+                </h2>
+                <p class="text-clouddancer text-sm sm:text-base leading-relaxed">
+                    1932년 세계 대공황의 여파로 조선 농촌이 파탄에 이르자, 일제 조선총독부는 농민 항쟁을 무마하고 식민 지배를 안정시키기 위해 <strong class="text-morningyellow font-bold">농촌진흥운동</strong>을 전개했습니다. 명분은 '농촌 구제'였으나, 본질은 농민 정신 통제와 침략 전쟁을 위한 수탈 기구화였습니다.
+                </p>
+                
+                <!-- Keyword Tags -->
+                <div class="pt-2 flex flex-wrap gap-2 text-xs">
+                    <span class="bg-cardborder/60 text-clouddancer px-3 py-1.5 rounded-lg border border-cardborder/80"><i class="fa-hashtag text-morningyellow mr-1"></i>세계대공황</span>
+                    <span class="bg-cardborder/60 text-clouddancer px-3 py-1.5 rounded-lg border border-cardborder/80"><i class="fa-hashtag text-morningyellow mr-1"></i>우가키 가즈시게</span>
+                    <span class="bg-cardborder/60 text-clouddancer px-3 py-1.5 rounded-lg border border-cardborder/80"><i class="fa-hashtag text-morningyellow mr-1"></i>자력갱생</span>
+                    <span class="bg-cardborder/60 text-clouddancer px-3 py-1.5 rounded-lg border border-cardborder/80"><i class="fa-hashtag text-morningyellow mr-1"></i>심전개발운동</span>
+                    <span class="bg-cardborder/60 text-clouddancer px-3 py-1.5 rounded-lg border border-cardborder/80"><i class="fa-hashtag text-morningyellow mr-1"></i>국민총력조선연맹</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-cardbg rounded-2xl p-6 sm:p-8 border border-morningyellow/30 shadow-xl space-y-6">
+            <div class="flex items-center space-x-3 border-b border-cardborder pb-4">
+                <div class="w-10 h-10 rounded-lg bg-morningyellow/10 border border-morningyellow/30 flex items-center justify-center text-morningyellow">
+                    <i class="fa-solid fa-lightbulb text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg sm:text-xl font-bold text-morningyellow">핵심 화두: 통계 자료로 던지는 생각거리</h3>
+                    <p class="text-xs sm:text-sm text-subtext">소작쟁의 수치 변화 뒤에 숨겨진 진실 탐구</p>
+                </div>
+            </div>
+
+            <!-- Introductory Text -->
+            <div class="bg-darkbg/70 p-4 sm:p-5 rounded-xl border border-cardborder leading-relaxed text-xs sm:text-sm text-clouddancer space-y-2">
+                <p>
+                    1930년대 초반 조선의 농촌 사회는 지주소작관계를 중심으로 급속히 변화하였다. 그리하여 농민층의 몰락은 더욱 가속화하였고 이에 따라 농민층의 일제와 지주에 대한 투쟁의식은 더욱 강화되었다. 이러한 결과 농민층의 소작쟁의는 급증하였다.
+                </p>
+            </div>
+
+            <!-- Core Question Trigger Box -->
+            <div class="interactive-card bg-gradient-to-r from-darkbg via-cardbg to-darkbg p-5 rounded-xl border border-morningyellow/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 cursor-pointer" onclick="openModal('modal-question-truth')">
+                <div class="space-y-1">
+                    <span class="text-xs font-bold text-morningyellow uppercase tracking-wider"><i class="fa-solid fa-circle-question mr-1"></i>생각해보기 질문</span>
+                    <h4 class="text-base sm:text-lg font-bold text-white leading-snug">
+                        "1930년대 중후반, 소작쟁의 수치가 줄어들고 있는데 과연 한국 농민들의 삶은 괜찮아졌을까요?"
+                    </h4>
+                </div>
+                <button class="shrink-0 px-4 py-2 bg-morningyellow text-black font-bold text-xs rounded-lg hover:bg-yellow-400 transition-colors flex items-center gap-1.5 shadow-md">
+                    <span>숨겨진 진실 보기</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Data Table Section -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-end">
+                    <h4 class="text-sm font-bold text-morningyellow flex items-center gap-1.5">
+                        <i class="fa-solid fa-table"></i> &lt;표 4&gt; 소작쟁의의 연도별 증감 현황 (1921∼1939년)
+                    </h4>
+                    <span class="text-[11px] text-subtext hidden sm:inline">좌우로 스크롤하여 전체 데이터를 확인하세요</span>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-cardborder">
+                    <table class="w-full text-xs text-center text-clouddancer">
+                        <thead class="bg-darkbg text-morningyellow border-b border-cardborder font-bold">
+                            <tr>
+                                <th class="py-2.5 px-3 border-r border-cardborder">연도</th>
+                                <th class="py-2.5 px-3 border-r border-cardborder">발생 건수</th>
+                                <th class="py-2.5 px-3">동원 인원수</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-cardborder bg-darkbg/40">
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1921</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">27</td>
+                                <td class="py-1.5 px-3">2,967</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1922</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">24</td>
+                                <td class="py-1.5 px-3">3,539</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1923</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder text-morningyellow font-bold">176</td>
+                                <td class="py-1.5 px-3">9,060</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1924</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">164</td>
+                                <td class="py-1.5 px-3">6,929</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1925</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">11</td>
+                                <td class="py-1.5 px-3">2,646</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1926</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">17</td>
+                                <td class="py-1.5 px-3">2,118</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1927</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">22</td>
+                                <td class="py-1.5 px-3">3,285</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1928</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">30</td>
+                                <td class="py-1.5 px-3">3,572</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1929</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">36</td>
+                                <td class="py-1.5 px-3">2,620</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors bg-morningyellow/5">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-bold text-morningyellow">1930</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder text-morningyellow font-bold">92</td>
+                                <td class="py-1.5 px-3 text-morningyellow font-bold">10,037</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1931</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">57</td>
+                                <td class="py-1.5 px-3">5,486</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1932</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">51</td>
+                                <td class="py-1.5 px-3">2,910</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1933</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">66</td>
+                                <td class="py-1.5 px-3">2,492</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors bg-morningyellow/5">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-bold text-morningyellow">1934</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder text-morningyellow font-bold">106</td>
+                                <td class="py-1.5 px-3 text-morningyellow font-bold">4,113</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1935</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">71</td>
+                                <td class="py-1.5 px-3">2,795</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold">1936</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder">56</td>
+                                <td class="py-1.5 px-3">3,462</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors bg-redaccent/5">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold text-redaccent">1937</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder text-redaccent">24</td>
+                                <td class="py-1.5 px-3 text-redaccent">2,234</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors bg-redaccent/5">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold text-redaccent">1938</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder text-redaccent">30</td>
+                                <td class="py-1.5 px-3 text-redaccent">1,338</td>
+                            </tr>
+                            <tr class="hover:bg-cardborder/40 transition-colors bg-redaccent/5">
+                                <td class="py-1.5 px-3 border-r border-cardborder font-semibold text-redaccent">1939</td>
+                                <td class="py-1.5 px-3 border-r border-cardborder text-redaccent">24</td>
+                                <td class="py-1.5 px-3 text-redaccent">969</td>
+                            </tr>
+                            <tr class="bg-darkbg font-bold border-t border-cardborder text-morningyellow">
+                                <td class="py-2 px-3 border-r border-cardborder">합 계</td>
+                                <td class="py-2 px-3 border-r border-cardborder">1,085</td>
+                                <td class="py-2 px-3">72,572</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="text-[11px] text-subtext leading-relaxed pt-1">
+                    <span class="text-morningyellow font-semibold">출처:</span> 1940년도 조선내 노동쟁의 및 소작쟁의에 관한 조사 (≪사상휘보≫22, 1940), 14∼15쪽 ; 지수걸, ≪일제하 농민조합운동연구≫(역사비평사, 1993), 44쪽에서 재인용.
+                </p>
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <div class="text-center sm:text-left space-y-1">
+                <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-morningyellow"></i>
+                    시기별 전개와 변화 과정
+                </h3>
+                <p class="text-xs sm:text-sm text-subtext">각 단계를 클릭하거나 '상세 사료 보기' 버튼을 누르면 상세 설명이 팝업됩니다.</p>
+            </div>
+
+            <!-- Timeline Main Wrapper -->
+            <div class="relative timeline-container pl-10 md:pl-0 space-y-10 md:space-y-12">
+
+                <!-- Stage 1 Card (Left/Odd on Desktop) -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="absolute -left-10 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-morningyellow text-black font-bold flex items-center justify-center text-sm z-10 shadow-lg pulse-yellow">
+                        1
+                    </div>
+                    
+                    <div class="w-full md:w-1/2 md:pr-10">
+                        <div class="interactive-card bg-cardbg rounded-xl p-5 sm:p-6 cursor-pointer" onclick="openModal('modal-stage1')">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-bold text-morningyellow bg-morningyellow/10 px-2.5 py-1 rounded">1932년 ~ 1934년</span>
+                                <span class="text-xs text-subtext group-hover:text-morningyellow transition-colors"><i class="fa-solid fa-circle-plus mr-1"></i>상세 사료</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-morningyellow mb-3">1. 발단 및 초기 전개 (자력갱생의 표방)</h4>
+                            <ul class="space-y-2 text-xs sm:text-sm text-clouddancer list-disc list-inside mb-4 leading-relaxed">
+                                <li><strong class="text-white font-bold">배경:</strong> 산미증식계획 부작용 및 대공황으로 쌀값 폭락, 소작쟁의 격화</li>
+                                <li><strong class="text-white font-bold">시작:</strong> 총독 우가키 가즈시게 주도, 농촌진흥위원회 관제 조직 구축</li>
+                                <li><strong class="text-white font-bold">핵심:</strong> '자력갱생' 표방, 5개년 농가 경제 갱생 계획으로 통제 시작</li>
+                            </ul>
+                            <button class="w-full py-2 bg-cardborder/50 group-hover:bg-morningyellow group-hover:text-black text-clouddancer text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-book-open text-xs"></i> 1단계 상세 분석 및 원문 보기
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden md:block md:w-1/2"></div>
+                </div>
+
+                <!-- Stage 2 Card (Right/Even on Desktop) -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="absolute -left-10 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-blueaccent text-black font-bold flex items-center justify-center text-sm z-10 shadow-lg">
+                        2
+                    </div>
+                    
+                    <div class="hidden md:block md:w-1/2"></div>
+                    <div class="w-full md:w-1/2 md:pl-10">
+                        <div class="interactive-card bg-cardbg rounded-xl p-5 sm:p-6 cursor-pointer" onclick="openModal('modal-stage2')">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-bold text-blueaccent bg-blueaccent/10 px-2.5 py-1 rounded">1935년 ~ 1939년</span>
+                                <span class="text-xs text-subtext group-hover:text-blueaccent transition-colors"><i class="fa-solid fa-circle-plus mr-1"></i>상세 사료</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-morningyellow mb-3">2. 정착 및 확대 (정신 통제와 전시 수탈)</h4>
+                            <ul class="space-y-2 text-xs sm:text-sm text-clouddancer list-disc list-inside mb-4 leading-relaxed">
+                                <li><strong class="text-white font-bold">사상 강화:</strong> '심전개발운동'을 통해 농민 정신 수양 및 사상 통제</li>
+                                <li><strong class="text-white font-bold">성격 변화:</strong> 1937 중일전쟁 이후 '생업보국' 내세우며 물자 증산 강요</li>
+                                <li><strong class="text-white font-bold">조직 통합:</strong> 1938 국민정신총동원조선연맹과 일치되어 전시 기구화</li>
+                            </ul>
+                            <button class="w-full py-2 bg-cardborder/50 group-hover:bg-blueaccent group-hover:text-black text-clouddancer text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-book-open text-xs"></i> 2단계 상세 분석 및 원문 보기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stage 3 Card (Left/Odd on Desktop) -->
+                <div class="relative flex flex-col md:flex-row items-center group">
+                    <div class="absolute -left-10 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-redaccent text-white font-bold flex items-center justify-center text-sm z-10 shadow-lg">
+                        3
+                    </div>
+                    
+                    <div class="w-full md:w-1/2 md:pr-10">
+                        <div class="interactive-card bg-cardbg rounded-xl p-5 sm:p-6 cursor-pointer" onclick="openModal('modal-stage3')">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="text-xs font-bold text-redaccent bg-redaccent/10 px-2.5 py-1 rounded">1940년 ~ 1945년</span>
+                                <span class="text-xs text-subtext group-hover:text-redaccent transition-colors"><i class="fa-solid fa-circle-plus mr-1"></i>상세 사료</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-morningyellow mb-3">3. 전시 수탈 체제 흡수 및 소멸</h4>
+                            <ul class="space-y-2 text-xs sm:text-sm text-clouddancer list-disc list-inside mb-4 leading-relaxed">
+                                <li><strong class="text-white font-bold">완전 흡수:</strong> 1940년 '국민총력조선연맹' 재편 시 완벽히 흡수·통합</li>
+                                <li><strong class="text-white font-bold">구제 명분 상실:</strong> '자력갱생' 구호가 사라지고 강제 공출 및 동원 전락</li>
+                                <li><strong class="text-white font-bold">최종 결과:</strong> 침략 전쟁을 위한 인적·물적 수탈 창구로 이용 후 광복</li>
+                            </ul>
+                            <button class="w-full py-2 bg-cardborder/50 group-hover:bg-redaccent group-hover:text-white text-clouddancer text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-book-open text-xs"></i> 3단계 상세 분석 및 원문 보기
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden md:block md:w-1/2"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="bg-cardbg rounded-2xl p-6 sm:p-8 border border-cardborder space-y-6">
+            <div class="flex items-center space-x-3 border-b border-cardborder pb-4">
+                <div class="w-10 h-10 rounded-lg bg-morningyellow/10 border border-morningyellow/30 flex items-center justify-center text-morningyellow">
+                    <i class="fa-solid fa-scale-balanced text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg sm:text-xl font-bold text-morningyellow">함께 알아두기: 농촌 통제의 양 날개 (소작 조정 법령)</h3>
+                    <p class="text-xs sm:text-sm text-subtext">농촌진흥운동과 동시에 추진된 일제의 소작쟁의 대응책</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <!-- Law 1 -->
+                <div class="bg-darkbg/60 p-5 rounded-xl border border-cardborder space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-morningyellow text-base">조선소작조정령 (1932)</h4>
+                        <span class="text-xs bg-morningyellow/20 text-morningyellow px-2 py-0.5 rounded">우가키 총독 체제</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-clouddancer leading-relaxed">
+                        농민들의 집단적 소작쟁의를 법원의 관제 조정 절차로 개별화하여 흡수하려 한 법령입니다. 농촌진흥운동이 '개별 농가의 정신과 경제'를 통제했다면, 소작조정령은 '농민 운동의 조직화'를 물리적으로 차단했습니다.
+                    </p>
+                </div>
+
+                <!-- Law 2 -->
+                <div class="bg-darkbg/60 p-5 rounded-xl border border-cardborder space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-morningyellow text-base">조선농지령 (1934)</h4>
+                        <span class="text-xs bg-blueaccent/20 text-blueaccent px-2 py-0.5 rounded">소작 기간 보장 한계</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-clouddancer leading-relaxed">
+                        소작 기간을 최소 3년(영년작물 7년) 보장했으나, <strong class="text-morningyellow font-bold">소작료 액수 제한이 전혀 없었고</strong> 지주에게 '정당한 사유' 시 소작권 박탈 권한을 남겨두어 지주 중심의 식민 지배 질서를 적극 보호했습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <div class="text-center sm:text-left space-y-1">
+                <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
+                    <i class="fa-solid fa-circle-question text-morningyellow"></i>
+                    역사 탐구 궁금증 Q&A
+                </h3>
+                <p class="text-xs sm:text-sm text-subtext">질문 카드를 클릭하면 핵심 답변을 바로 확인하실 수 있습니다.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Q1 -->
+                <div class="interactive-card bg-cardbg rounded-xl p-4 cursor-pointer flex flex-col justify-between" onclick="toggleQA('qa1')">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-morningyellow"><i class="fa-solid fa-q mr-1"></i>질문 01</span>
+                        <h4 class="text-sm font-semibold text-morningyellow">일제는 왜 하필 1932년에 '자력갱생'을 강조했을까요?</h4>
+                    </div>
+                    <div class="mt-3 text-xs text-morningyellow flex items-center gap-1">
+                        <span>답변 보기</span>
+                        <i id="qa1-icon" class="fa-solid fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div id="qa1" class="hidden mt-3 pt-3 border-t border-cardborder text-xs text-clouddancer leading-relaxed bg-darkbg/50 p-2.5 rounded">
+                        1920년대 산미증식계획 실패와 1929년 세계 대공황으로 농촌이 파탄 나자, 일제는 재정 지원 대신 <strong class="text-morningyellow font-bold">농민 스스로의 절약과 정신 개조(자력갱생)로 위기를 넘기게 하고 항일 농민 운동을 무마하려</strong> 했습니다.
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="interactive-card bg-cardbg rounded-xl p-4 cursor-pointer flex flex-col justify-between" onclick="toggleQA('qa2')">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-morningyellow"><i class="fa-solid fa-q mr-1"></i>질문 02</span>
+                        <h4 class="text-sm font-semibold text-morningyellow">소작조정령이 제정되었는데 왜 소작쟁의는 더 늘어났을까요?</h4>
+                    </div>
+                    <div class="mt-3 text-xs text-morningyellow flex items-center gap-1">
+                        <span>답변 보기</span>
+                        <i id="qa2-icon" class="fa-solid fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div id="qa2" class="hidden mt-3 pt-3 border-t border-cardborder text-xs text-clouddancer leading-relaxed bg-darkbg/50 p-2.5 rounded">
+                        소작조정령은 고율의 소작료 자체를 제한하지 않고 지주 편향적 조정을 강요했기 때문에, <strong class="text-morningyellow font-bold">농민들의 실질적 삶이 개선되지 않아 생존권을 위한 저항이 계속 증가</strong>했습니다.
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="interactive-card bg-cardbg rounded-xl p-4 cursor-pointer flex flex-col justify-between" onclick="toggleQA('qa3')">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold text-morningyellow"><i class="fa-solid fa-q mr-1"></i>질문 03</span>
+                        <h4 class="text-sm font-semibold text-morningyellow">농촌진흥운동과 국민총력조선연맹은 무슨 관계인가요?</h4>
+                    </div>
+                    <div class="mt-3 text-xs text-morningyellow flex items-center gap-1">
+                        <span>답변 보기</span>
+                        <i id="qa3-icon" class="fa-solid fa-chevron-down transition-transform"></i>
+                    </div>
+                    <div id="qa3" class="hidden mt-3 pt-3 border-t border-cardborder text-xs text-clouddancer leading-relaxed bg-darkbg/50 p-2.5 rounded">
+                        초기의 농촌 통제 조직(농촌진흥회)이 1938년 국민정신총동원, 1940년 국민총력조선연맹으로 확장·재편되면서 <strong class="text-morningyellow font-bold">농촌진흥운동이 전시 강제 수탈 기구의 말단 조직으로 흡수</strong>된 관계입니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-gradient-to-br from-cardbg to-darkbg rounded-2xl p-6 sm:p-8 border border-morningyellow/30 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-morningyellow/10 rounded-full blur-2xl"></div>
+            
+            <div class="relative z-10 space-y-4">
+                <div class="flex items-center space-x-2 text-morningyellow">
+                    <i class="fa-solid fa-award text-xl"></i>
+                    <h3 class="text-xl font-bold">요약 및 역사적 의의</h3>
+                </div>
+                
+                <p class="text-sm sm:text-base text-clouddancer leading-relaxed">
+                    농촌진흥운동은 겉으로는 <strong class="text-morningyellow font-semibold">'농촌 구제'와 '자력갱생'</strong>을 내세웠으나, 본질적으로는 <strong class="text-white font-bold">세계 대공황기 조선 농민의 계급적·항일 저항을 무마하고 식민지 지배 질서를 유지하려는 철저한 관제 통제 정책</strong>이었습니다.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-cardbg/80 p-4 rounded-xl border border-cardborder text-xs sm:text-sm text-clouddancer">
+                        <span class="text-morningyellow font-bold block mb-1">📌 초기 한계 (1930년대 초)</span>
+                        지주 중심의 소작 관계나 농촌 경제의 근본적 모순은 방치한 채, 농민 개인의 근검절약과 정신 개조만을 강요했습니다.
+                    </div>
+                    <div class="bg-cardbg/80 p-4 rounded-xl border border-cardborder text-xs sm:text-sm text-clouddancer">
+                        <span class="text-morningyellow font-bold block mb-1">📌 전시 수탈화 (1930년대 후)</span>
+                        중일전쟁 이후 국민총력조선연맹으로 흡수되어 침략 전쟁을 지원하는 식량 공출, 징용, 징병의 강제 동원 수단으로 변질되었습니다.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-cardborder bg-darkbg py-6 text-center text-xs text-subtext mt-12">
+        <div class="max-w-6xl mx-auto px-4 space-y-2">
+            <p>일제 강점기 농촌진흥운동 역사 학습 콘텐츠</p>
+            <p class="text-cardborder">Designed with Dark UI for Optimal Reading Experience</p>
+        </div>
+    </footer>
+
+
+    <!-- Modal for Question Truth -->
+    <div id="modal-question-truth" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm modal-backdrop" onclick="closeModal('modal-question-truth')"></div>
+        <div class="bg-cardbg border border-morningyellow/40 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col z-10 shadow-2xl modal-content overflow-hidden relative">
+            <div class="p-5 border-b border-cardborder flex justify-between items-center bg-darkbg/50">
+                <div class="flex items-center space-x-2">
+                    <span class="bg-morningyellow text-black font-bold text-xs px-2.5 py-1 rounded">질문 해설</span>
+                    <h3 class="text-lg font-bold text-morningyellow">소작쟁의 감소 뒤에 숨겨진 진실</h3>
+                </div>
+                <button onclick="closeModal('modal-question-truth')" class="text-subtext hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 text-sm leading-relaxed text-clouddancer">
+                <div class="bg-darkbg/80 p-4 rounded-xl border border-morningyellow/30 text-morningyellow font-semibold text-base">
+                    💡 결론부터 말하자면, 전혀 그렇지 않습니다! 농민의 삶이 개선된 것이 아니라, 일제의 강압적 통제와 탄압 때문이었습니다.
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> 1. 관제 통제 및 소작조정령(1932)의 착시
+                    </h4>
+                    <p class="text-clouddancer">
+                        1930년대 초 소작쟁의가 폭발하자 일제는 <strong class="text-white font-bold">농촌진흥운동(1932~)</strong>을 통해 부락 단위까지 농민 통제망을 구축하고, <strong class="text-white font-bold">조선소작조정령(1932)</strong>을 공포했습니다. 이를 통해 농민들의 조직적·집단적 저항을 법원의 개별 관제 조정 절차로 강제 수용시켰습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-burst"></i> 2. 중일전쟁(1937) 이후 전시 탄압의 극대화
+                    </h4>
+                    <p class="text-clouddancer">
+                        1937년 중일전쟁 발발 이후 표에서 보듯 소작쟁의 발생 건수(24건) 및 동원 인원수(969명)가 대폭 감소합니다. 이는 농가 경제가 풍요로워진 것이 아니라, <strong class="text-morningyellow font-bold">전시 총동원 체제하에서 전시 계엄에 준하는 혹독한 공권력 탄압과 사상 통제</strong>로 농민들의 집단행동이 물리적으로 봉쇄당했기 때문입니다.
+                    </p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-cardborder bg-darkbg/50 text-right">
+                <button onclick="closeModal('modal-question-truth')" class="px-5 py-2 bg-morningyellow text-black text-xs font-bold rounded-lg hover:bg-yellow-400 transition-colors">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 1 -->
+    <div id="modal-stage1" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm modal-backdrop" onclick="closeModal('modal-stage1')"></div>
+        <div class="bg-cardbg border border-morningyellow/40 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col z-10 shadow-2xl modal-content overflow-hidden relative">
+            <div class="p-5 border-b border-cardborder flex justify-between items-center bg-darkbg/50">
+                <div class="flex items-center space-x-2">
+                    <span class="bg-morningyellow text-black font-bold text-xs px-2.5 py-1 rounded">1단계 사료 탐구</span>
+                    <h3 class="text-lg font-bold text-morningyellow">발단 및 초기 전개 (1932 ~ 1934)</h3>
+                </div>
+                <button onclick="closeModal('modal-stage1')" class="text-subtext hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 text-sm leading-relaxed text-clouddancer">
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye"></i> 1. 심층 시대적 배경
+                    </h4>
+                    <p class="text-clouddancer">
+                        1920년대 추진된 <strong class="text-white font-bold">산미증식계획</strong>은 조선 농민에게 수탈과 부채 급증이라는 악결과를 남겼습니다. 여기에 1929년 발생한 <strong class="text-white font-bold">세계 대공황</strong>의 여파로 쌀값과 누에고치 가격이 폭락하면서 농촌 경제는 전면 파탄에 이르렀습니다. 이에 따라 농민들의 소작쟁의와 항일 농민 운동이 폭발적으로 증가했습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2 bg-darkbg/60 p-4 rounded-xl border border-cardborder">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines"></i> 2. 우가키 총독의 주도와 관제 조직화
+                    </h4>
+                    <p class="text-clouddancer">
+                        1932년 7월, 조선총독 <strong class="text-white font-bold">우가키 가즈시게(宇垣一成)</strong>는 도지사 회의에서 농촌진흥운동의 공식 착수를 선언했습니다. 
+                        같은 해 9~10월 「조선총독부 농촌진흥위원회 규정」과 「농산어촌 진흥에 관한 건」을 공포하여 <strong class="text-morningyellow font-bold">[조선총독부 → 도 · 군 · 읍면 진흥위원회 → 말단 부락 농촌진흥회]</strong>로 이어지는 촘촘한 관제 통제망을 이 시기에 이미 완성했습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line"></i> 3. 주요 정책 및 '자력갱생'의 허구성
+                    </h4>
+                    <p class="text-clouddancer">
+                        일제는 식량 확보, 현금 수지 균형, 부채 정리를 3대 목표로 내세우고 면 단위마다 <strong class="text-white font-bold">'지도 부락'</strong>을 지정하여 <strong class="text-white font-bold">5개년 농가 경제 갱생 계획</strong>을 강요했습니다. 
+                        농민들에게 '근검절약'과 '정신 개조'만을 강조하며 스스로 위기를 극복하라는 <strong class="text-morningyellow font-bold">'자력갱생(自力更生)'</strong>을 표방했으나, 지주 중심의 수탈 구조는 전혀 개선하지 않았습니다.
+                    </p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-cardborder bg-darkbg/50 text-right">
+                <button onclick="closeModal('modal-stage1')" class="px-5 py-2 bg-morningyellow text-black text-xs font-bold rounded-lg hover:bg-yellow-400 transition-colors">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2 -->
+    <div id="modal-stage2" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm modal-backdrop" onclick="closeModal('modal-stage2')"></div>
+        <div class="bg-cardbg border border-blueaccent/40 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col z-10 shadow-2xl modal-content overflow-hidden relative">
+            <div class="p-5 border-b border-cardborder flex justify-between items-center bg-darkbg/50">
+                <div class="flex items-center space-x-2">
+                    <span class="bg-blueaccent text-black font-bold text-xs px-2.5 py-1 rounded">2단계 사료 탐구</span>
+                    <h3 class="text-lg font-bold text-morningyellow">정착 및 확대 (1935 ~ 1939)</h3>
+                </div>
+                <button onclick="closeModal('modal-stage2')" class="text-subtext hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 text-sm leading-relaxed text-clouddancer">
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-brain"></i> 1. 심전개발운동(心田開發運動)과 정신 통제
+                    </h4>
+                    <p class="text-clouddancer">
+                        1935년부터 일제는 단순한 경제 갱생 구호를 넘어 농민의 사상과 정신을 개조하기 위한 <strong class="text-morningyellow font-bold">'심전개발운동'</strong>을 병행했습니다. 황국신민화 사상 교육과 일왕에 대한 충성을 강요하며 농민 항쟁 의지를 근본적으로 황폐화시키고자 했습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2 bg-darkbg/60 p-4 rounded-xl border border-cardborder">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-tractor"></i> 2. 자작농지 설정사업의 실효성 부재
+                    </h4>
+                    <p class="text-clouddancer">
+                        소작농들의 불만을 달래기 위해 '자작농 육성 계획'을 내세웠으나, 실제 지원액은 극히 미비했고 소작농이 자작농으로 전환된 사례는 매우 드물었습니다. 지주 계층의 기득권을 보호하는 식민 지배의 한계를 드러냈습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-crosshairs"></i> 3. 중일전쟁(1937)과 '생업보국'으로의 변질
+                    </h4>
+                    <p class="text-clouddancer">
+                        1937년 중일전쟁이 발발하자 운동의 성격이 급변했습니다. 농가 생계 안정보다 전쟁에 필요한 농산물 증산을 강요하는 <strong class="text-morningyellow font-bold">'생업보국(生業報國)'</strong>이 전면에 내걸렸습니다. 
+                        1938년 전시 대중 동원 기구인 <strong class="text-white font-bold">'국민정신총동원조선연맹'</strong>과 농촌진흥운동이 일치·통합되면서 전쟁 수행 하부 기구로 전락했습니다.
+                    </p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-cardborder bg-darkbg/50 text-right">
+                <button onclick="closeModal('modal-stage2')" class="px-5 py-2 bg-blueaccent text-black text-xs font-bold rounded-lg hover:bg-blue-400 transition-colors">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3 -->
+    <div id="modal-stage3" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm modal-backdrop" onclick="closeModal('modal-stage3')"></div>
+        <div class="bg-cardbg border border-redaccent/40 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col z-10 shadow-2xl modal-content overflow-hidden relative">
+            <div class="p-5 border-b border-cardborder flex justify-between items-center bg-darkbg/50">
+                <div class="flex items-center space-x-2">
+                    <span class="bg-redaccent text-white font-bold text-xs px-2.5 py-1 rounded">3단계 사료 탐구</span>
+                    <h3 class="text-lg font-bold text-morningyellow">전시 수탈 체제 흡수 및 소멸 (1940 ~ 1945)</h3>
+                </div>
+                <button onclick="closeModal('modal-stage3')" class="text-subtext hover:text-white text-xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 text-sm leading-relaxed text-clouddancer">
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-sitemap"></i> 1. 국민총력조선연맹으로의 완전 흡수
+                    </h4>
+                    <p class="text-clouddancer">
+                        1940년 10월, 일제는 전시 총동원 체제를 극대화하기 위해 기존 국민정신총동원 연맹을 <strong class="text-morningyellow font-bold">'국민총력조선연맹'</strong>으로 확대 재편했습니다. 이 과정에서 농촌진흥운동의 기존 부락 조직들은 국민총력연맹의 말단 구역 조직으로 완전히 흡수되었습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2 bg-darkbg/60 p-4 rounded-xl border border-cardborder">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-hand-holding-dollar"></i> 2. 강제 공출과 인적·물적 수탈
+                    </h4>
+                    <p class="text-clouddancer">
+                        이 시기 '자력갱생'이라는 허구적 명분조차 소멸했습니다. 농촌진흥 조직망은 <strong class="text-white font-bold">미곡 강제 공출, 금속류 거두기, 강제 징용 및 징병</strong>을 원활하게 집행하기 위한 강제 동원 기관으로 작동했습니다.
+                    </p>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="text-morningyellow font-bold text-base flex items-center gap-2">
+                        <i class="fa-solid fa-flag"></i> 3. 역사적 평가 및 소멸
+                    </h4>
+                    <p class="text-clouddancer">
+                        농촌진흥운동은 1945년 8월 15일 광복 때까지 일제의 식민지 침략 전쟁을 뒷받침하는 가장 광범위한 농촌 수탈 기구로 악용되다가 일제의 멸망과 함께 소멸했습니다.
+                    </p>
+                </div>
+            </div>
+            <div class="p-4 border-t border-cardborder bg-darkbg/50 text-right">
+                <button onclick="closeModal('modal-stage3')" class="px-5 py-2 bg-redaccent text-white text-xs font-bold rounded-lg hover:bg-red-600 transition-colors">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function toggleQA(qaId) {
+            const target = document.getElementById(qaId);
+            const icon = document.getElementById(qaId + '-icon');
+            
+            if (target) {
+                if (target.classList.contains('hidden')) {
+                    target.classList.remove('hidden');
+                    if(icon) icon.style.transform = 'rotate(180deg)';
+                } else {
+                    target.classList.add('hidden');
+                    if(icon) icon.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('[id^="modal-"]:not(.hidden)');
+                openModals.forEach(modal => {
+                    modal.classList.add('hidden');
+                });
+                document.body.style.overflow = 'auto';
+            }
+        });
+    </script>
+</body>
+</html>

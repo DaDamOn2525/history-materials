@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>조소앙의 삼균주의 수업 슬라이드 (Copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f3f4f1; --paper:#ffffff; --ink:#181b21; --muted:#59606c; --line:#d3d7d0;
+  --indigo:#23467a; --ochre:#8a5d0c; --jade:#1d6f61; --wash:#e9edf3;
+  --serif:"Noto Serif KR","Nanum Myeongjo","Batang",serif;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#10151d; --paper:#171e29; --ink:#e8ebef; --muted:#a2abb8; --line:#2f3a4a;
+    --indigo:#86a6d6; --ochre:#d4a54f; --jade:#63b8a7; --wash:#1b2533; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#10151d; --paper:#171e29; --ink:#e8ebef; --muted:#a2abb8; --line:#2f3a4a;
+  --indigo:#86a6d6; --ochre:#d4a54f; --jade:#63b8a7; --wash:#1b2533; color-scheme:dark;
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  height:100%;margin:0;display:flex;flex-direction:column;
+  background:var(--bg);color:var(--ink);
+  font-family:var(--sans);font-size:clamp(1rem,.55rem + 1.25vw,1.3rem);line-height:1.7;
+  word-break:keep-all;overflow-wrap:break-word;
+}
+#stage{flex:1;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow-y:auto;padding:clamp(20px,4.5vw,64px)}
+.slide.active{display:flex}
+.inner{margin:auto;width:100%;max-width:1060px}
+h1,h2,h3{font-family:var(--serif);line-height:1.3;margin:0}
+h2{font-size:clamp(1.5rem,1rem + 2.4vw,2.5rem);font-weight:700;margin-bottom:.9em;max-width:22em}
+p{margin:0 0 .8em}
+small,.note{color:var(--muted);font-size:.78em}
+.d-pol{--c:var(--indigo)} .d-eco{--c:var(--ochre)} .d-edu{--c:var(--jade)}
+
+/* cover */
+.cover .glyph{
+  font-family:var(--serif);font-weight:900;color:var(--indigo);
+  font-size:clamp(5rem,4rem + 16vw,13rem);line-height:1;letter-spacing:.02em;margin:0 0 .12em -.04em;
+}
+.cover h1{font-size:clamp(1.9rem,1.2rem + 3vw,3.3rem);font-weight:700}
+.cover .lead{font-family:var(--serif);font-size:clamp(1.1rem,.9rem + 1vw,1.7rem);margin:.7em 0 1.2em;max-width:26em}
+.cover .meta{color:var(--muted);font-size:.85em;border-top:1px solid var(--line);padding-top:.9em;max-width:34em}
+
+/* reveal steps */
+.step{opacity:0;transition:opacity .3s}
+.step.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.step{transition:none}}
+
+/* prompt slide */
+.prompt-line{font-family:var(--serif);font-size:clamp(1.25rem,.9rem + 1.6vw,2.1rem);line-height:1.5;margin:0 0 .9em;max-width:24em}
+.prompt-line.q{color:var(--indigo);font-weight:700}
+.bar-note{border-left:4px solid var(--indigo);padding:.2em 0 .2em 1em;margin:0 0 1em;max-width:40em}
+
+/* timeline */
+.tl{list-style:none;margin:0 0 1.4em;padding:0 0 0 1.4em;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:.35em 0 .35em .4em}
+.tl li::before{content:"";position:absolute;left:calc(-1.4em - 6px);top:1em;width:10px;height:10px;border-radius:50%;background:var(--bg);border:2px solid var(--muted)}
+.tl li.hi::before{background:var(--indigo);border-color:var(--indigo)}
+.tl b{font-family:var(--serif);display:inline-block;min-width:6.2em}
+.gloss{background:var(--wash);padding:.8em 1.1em;max-width:40em;border-radius:4px}
+
+/* 3x3 grid */
+.grid3{display:grid;grid-template-columns:minmax(5.2em,auto) repeat(3,1fr);font-size:.92em}
+.grid3>div{padding:.7em .8em;border-bottom:1px solid var(--line)}
+.grid3 .hd{font-family:var(--serif);font-weight:700;border-top:4px solid var(--c);color:var(--c)}
+.grid3 .rh{font-family:var(--serif);font-weight:700}
+.grid3 .rh small{display:block;font-family:var(--sans);font-weight:400}
+.grid3 .corner{border-bottom:1px solid var(--line)}
+
+/* chain */
+.chain{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:0 2em;max-width:60em}
+.chain .q{font-family:var(--serif);font-weight:700;padding:.75em 0 .1em;border-top:1px solid var(--line)}
+.chain .a{padding:.75em 0 .1em;border-top:1px solid var(--line)}
+@media (max-width:640px){.chain{grid-template-columns:1fr}.chain .a{border-top:0;padding-top:0;padding-bottom:.6em;color:var(--indigo)}}
+
+/* lanes */
+.lane{margin:0 0 1.3em}
+.lane-h{color:var(--muted);font-size:.85em;margin-bottom:.4em}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.5em .6em}
+.chip{border:1px solid var(--ink);padding:.35em .8em;border-radius:3px;font-weight:500}
+.lane.rx .chip{border-color:var(--indigo);color:var(--indigo)}
+.arr{color:var(--muted)}
+.ask{font-family:var(--serif);font-weight:700;margin:1.2em 0 .3em}
+.ans{border-left:4px solid var(--indigo);padding-left:1em;max-width:36em}
+
+/* two columns */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1.6em;margin-bottom:1.2em;max-width:52em}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+.col{border-top:4px solid var(--ink);padding-top:.6em}
+.col h3{font-size:1.05em;margin-bottom:.3em}
+.col.r{border-top-color:var(--muted)}
+
+/* tables */
+.scroll{overflow-x:auto;max-width:100%}
+.tbl{width:100%;border-collapse:collapse;font-size:.92em;min-width:32em}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:.65em .8em;border-bottom:1px solid var(--line)}
+.tbl th{font-family:var(--serif);color:var(--muted);font-weight:500;font-size:.9em}
+.tbl td.dm{font-family:var(--serif);font-weight:700;color:var(--c);white-space:nowrap}
+.tbl td.join{background:var(--wash)}
+
+/* position box */
+.pos{border-top:4px solid var(--indigo);background:var(--wash);padding:.9em 1.1em;max-width:44em;margin:1.1em 0;border-radius:0 0 4px 4px}
+.pos b{font-family:var(--serif)}
+.limits{max-width:44em;margin:1em 0 0;padding-left:1.1em}
+.limits li{margin-bottom:.35em}
+.limits.tight li{margin-bottom:.25em}
+
+/* questions */
+.qs{list-style:none;margin:0;padding:0;max-width:44em;counter-reset:q}
+.qs li{counter-increment:q;position:relative;padding:.6em 0 .6em 2.2em;border-bottom:1px solid var(--line)}
+.qs li::before{content:counter(q);position:absolute;left:0;top:.55em;font-family:var(--serif);font-weight:700;color:var(--indigo)}
+
+/* narration + bar */
+#notes{display:none;max-height:40%;overflow-y:auto;border-top:1px solid var(--line);background:var(--paper);padding:14px clamp(16px,4.5vw,64px);line-height:1.85;font-size:.95em}
+#notes .nh{color:var(--muted);font-size:.8em;margin-bottom:.4em}
+#notes p{max-width:44em}
+body.show-notes #notes{display:block}
+.narr{display:none}
+#bar{display:flex;align-items:center;gap:.6em;padding:8px clamp(12px,3vw,40px);border-top:1px solid var(--line);background:var(--bg);font-size:.8em}
+#bar .sp{flex:1}
+button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:4px;padding:.4em .9em;cursor:pointer;min-height:2.4em}
+button:hover{border-color:var(--ink)}
+button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+#count{color:var(--muted);min-width:4.5em;text-align:center}
+</style>
+</head>
+<body>
+
+<main id="stage">
+
+<!-- 1 표지 -->
+<section class="slide cover" aria-label="표지">
+  <div class="inner">
+    <div class="glyph" aria-hidden="true">三均</div>
+    <h1>조소앙의 삼균주의</h1>
+    <p class="lead">정치·경제·교육의 균등은 어떤 문제에 대한 답이었는가</p>
+    <p class="meta">고등학교 한국사 수업. 1941년 건국강령에서 1948년 제헌 헌법까지 이어지는 질문을 따라간다.</p>
+  </div>
+  <div class="narr">
+    <p>오늘은 조소앙이 제시한 삼균주의를 다룹니다. 확인할 것은 세 가지입니다.</p>
+    <p>첫째, 삼균주의가 무엇인지. 둘째, 왜 삼균주의에 좌우 통합이라는 말이 따라붙는지. 셋째, 1948년 제헌 헌법에 어떤 방식으로 이어지는지입니다.</p>
+    <p>수업의 마지막에는 질문 하나가 남습니다. 삼균주의가 제헌 헌법에 계승되었다고 쓰려면 어떤 증거가 필요한가. 이 질문에 각자 자기 말로 답을 써 보는 것이 오늘 수업의 도착점입니다.</p>
+  </div>
+</section>
+
+<!-- 2 오늘의 질문 -->
+<section class="slide" aria-label="오늘의 질문">
+  <div class="inner">
+    <h2>한 표씩 가지면 정치적 균등은 이루어진 것인가</h2>
+    <p class="prompt-line step">보통선거에서 성인은 누구나 한 표를 가진다.</p>
+    <p class="prompt-line step">그런데 생계에 매인 사람과 재산이 넉넉한 사람이 정치에 쓸 수 있는 시간, 정보, 비용은 같은가.</p>
+    <p class="prompt-line q step">한 표의 평등만으로 정치적 균등이 이루어졌다고 말할 수 있는가. 옆 사람과 1분 동안 이야기해 보자.</p>
+  </div>
+  <div class="narr">
+    <p>질문 하나로 시작합니다. 보통선거가 실시되면 성인은 누구나 한 표를 가집니다. 화면의 첫 문장입니다.</p>
+    <p>두 번째 문장을 공개합니다. 하루 일해야 생계가 유지되는 사람과 재산이 넉넉한 사람이 같은 한 표를 가집니다. 그런데 정치에 쓸 수 있는 시간과 정보와 비용도 같을까요.</p>
+    <p>세 번째 문장이 오늘의 질문입니다. 옆 사람과 1분 동안 이야기하도록 시간을 줍니다. 몇 모둠의 답을 듣고, 답이 갈리는 지점을 칠판에 적어 둡니다.</p>
+    <p>이 문제에 독립운동 안에서 조소앙이 내놓은 답이 삼균주의입니다.</p>
+  </div>
+</section>
+
+<!-- 3 인물과 시기 -->
+<section class="slide" aria-label="조소앙과 삼균주의의 시기">
+  <div class="inner">
+    <h2>조소앙과 삼균주의가 문서가 된 시기</h2>
+    <ul class="tl">
+      <li><b>1887년</b>조소앙 출생</li>
+      <li class="hi"><b>1930년</b>한국독립당 창당, 당의·당강에 삼균주의 반영</li>
+      <li class="hi"><b>1941년 11월</b>대한민국 임시정부 건국강령에 삼균주의 채택</li>
+      <li><b>1948년 7월 17일</b>제헌 헌법 공포</li>
+      <li><b>1958년</b>조소앙 사망</li>
+    </ul>
+    <p class="gloss">均은 고르게 한다는 뜻이다. 三均은 정치, 경제, 교육 세 가지를 고르게 한다는 뜻이다.</p>
+  </div>
+  <div class="narr">
+    <p>조소앙은 1887년에 태어났습니다. 삼균주의는 1930년 한국독립당의 당의와 당강에 반영되었고, 1941년 11월 대한민국 임시정부의 건국강령에 채택되었습니다. 건국강령은 독립 이후에 세울 나라의 구상을 적은 문서입니다.</p>
+    <p>제헌 헌법은 그로부터 7년 뒤인 1948년 7월 17일에 공포됩니다. 이 시간 순서를 기억해 두면 오늘 마지막 논점이 선명해집니다.</p>
+    <p>이름의 뜻부터 확인합니다. 균은 고르게 한다는 뜻이고, 삼균은 세 가지를 고르게 한다는 뜻입니다. 세 가지는 정치, 경제, 교육입니다.</p>
+  </div>
+</section>
+
+<!-- 4 개념: 3x3 -->
+<section class="slide" aria-label="삼균주의의 3×3 구조">
+  <div class="inner">
+    <h2>삼균주의는 세 영역과 세 층위의 조합이다</h2>
+    <div class="scroll">
+    <div class="grid3">
+      <div class="corner"></div>
+      <div class="hd d-pol">정치 균등</div>
+      <div class="hd d-eco">경제 균등</div>
+      <div class="hd d-edu">교육 균등</div>
+
+      <div class="rh step" data-g="r1">개인 간<small>人與人</small></div>
+      <div class="step" data-g="r1">보통선거</div>
+      <div class="step" data-g="r1">토지와 대생산기관의 국유, 생활 보장</div>
+      <div class="step" data-g="r1">국비 의무교육</div>
+
+      <div class="rh step" data-g="r2">민족 간<small>族與族</small></div>
+      <div class="step" data-g="r2">민족자결, 식민 지배의 부정</div>
+      <div class="step" data-g="r2">민족 간 경제 착취의 부정</div>
+      <div class="step" data-g="r2">민족 문화와 교육의 동등한 권리</div>
+
+      <div class="rh step" data-g="r3">국가 간<small>國與國</small></div>
+      <div class="step" data-g="r3">국가 주권의 평등</div>
+      <div class="step" data-g="r3">국제 경제의 평등</div>
+      <div class="step" data-g="r3">국제 교육·문화 교류의 평등</div>
+    </div>
+    </div>
+    <p class="note" style="margin-top:1em">첫째 줄은 건국강령의 조항을 정리한 것이고, 둘째·셋째 줄은 수업용으로 정리한 요약이다.</p>
+  </div>
+  <div class="narr">
+    <p>삼균주의를 기억하는 뼈대는 3×3 표입니다. 가로는 균등이 이루어지는 세 영역이고, 세로는 균등이 적용되는 세 층위입니다. 영역은 정치, 경제, 교육입니다. 표의 위쪽 색도 영역마다 다르게 칠해 두었고, 이후 슬라이드에서 같은 색으로 나옵니다.</p>
+    <p>첫 줄을 공개합니다. 개인과 개인 사이입니다. 정치 균등은 보통선거, 경제 균등은 토지와 대생산기관의 국유와 생활 보장, 교육 균등은 국비 의무교육입니다.</p>
+    <p>둘째 줄은 민족과 민족 사이입니다. 민족자결과 식민 지배의 부정, 경제적 착취의 부정, 문화와 교육의 동등한 권리입니다.</p>
+    <p>셋째 줄은 국가와 국가 사이입니다. 주권의 평등, 국제 경제의 평등, 교류의 평등입니다.</p>
+    <p>표 아래의 밝힘글을 읽어 줍니다. 첫째 줄은 건국강령의 조항을 정리한 것이고, 둘째와 셋째 줄은 수업용으로 정리한 요약입니다.</p>
+  </div>
+</section>
+
+<!-- 5 논리 사슬 -->
+<section class="slide" aria-label="세 영역을 묶은 이유">
+  <div class="inner">
+    <h2>왜 세 영역을 함께 다루는가</h2>
+    <div class="chain">
+      <div class="q">정치 권리만 평등하면 충분한가</div>
+      <div class="a step">경제력이 다르면 실제 정치 참여가 달라진다. 그래서 경제 균등이 필요하다.</div>
+      <div class="q">경제만 평등하면 충분한가</div>
+      <div class="a step">교육 기회가 다르면 다음 세대의 경제력이 다시 벌어진다. 그래서 교육 균등이 필요하다.</div>
+      <div class="q">그렇다면 세 영역은 어떤 관계인가</div>
+      <div class="a step">서로를 떠받친다. 하나만 고르게 하면 다른 둘이 그 균등을 다시 무너뜨린다.</div>
+    </div>
+  </div>
+  <div class="narr">
+    <p>세 영역을 묶은 이유를 질문과 답으로 따라갑니다. 질문을 읽고, 학생이 먼저 답한 뒤에 화면의 답을 공개합니다.</p>
+    <p>정치 권리만 평등하면 충분한가. 경제력이 다르면 실제 정치 참여가 달라집니다. 그래서 경제 균등이 필요합니다.</p>
+    <p>경제만 평등하면 충분한가. 교육 기회가 다르면 다음 세대의 경제력이 다시 벌어집니다. 그래서 교육 균등이 필요합니다.</p>
+    <p>그렇다면 세 영역은 어떤 관계인가. 서로를 떠받칩니다. 하나만 고르게 하면 다른 둘이 그 균등을 다시 무너뜨립니다. 이것이 정치, 경제, 교육이 한 묶음이 된 논리입니다.</p>
+  </div>
+</section>
+
+<!-- 6 층위 -->
+<section class="slide" aria-label="세 층위의 논리">
+  <div class="inner">
+    <h2>개인 간, 민족 간, 국가 간의 균등은 이어져 있다</h2>
+    <div class="lane">
+      <div class="lane-h">삼균주의의 논리: 세 층위의 불균등은 이어진 문제로 다뤄진다</div>
+      <div class="flow"><span class="chip">국가가 국가를 침략</span><span class="arr">→</span><span class="chip">민족이 민족을 지배</span><span class="arr">→</span><span class="chip">개인이 개인을 착취</span></div>
+    </div>
+    <div class="lane rx step">
+      <div class="lane-h">처방: 균등이 넓어지는 방향</div>
+      <div class="flow"><span class="chip">개인 간 균등</span><span class="arr">→</span><span class="chip">민족 간 균등</span><span class="arr">→</span><span class="chip">국가 간 균등</span></div>
+    </div>
+    <p class="ask step">식민지 조선에서는 세 균등 가운데 무엇이 먼저 필요했는가</p>
+    <p class="ans step">민족 간 균등이다. 독립운동의 맥락에서는 독립이 다른 균등의 출발 조건이 된다.</p>
+  </div>
+  <div class="narr">
+    <p>이 슬라이드는 표의 세로축, 세 층위를 설명합니다. 삼균주의에서는 국가가 국가를 침략하는 문제, 민족이 민족을 지배하는 문제, 개인이 개인을 착취하는 문제가 따로 떨어진 문제가 아니라 이어진 문제로 다뤄집니다.</p>
+    <p>처방을 공개합니다. 균등이 넓어지는 방향은 개인 간 균등에서 민족 간 균등으로, 다시 국가 간 균등으로 이어집니다.</p>
+    <p>질문을 하나 던집니다. 식민지 조선에서는 세 균등 가운데 무엇이 먼저 필요했을까요. 학생의 답을 듣고 화면의 답을 공개합니다. 민족 간 균등, 곧 독립입니다. 독립운동의 맥락에서는 독립이 다른 균등의 출발 조건이 됩니다.</p>
+    <p>균등이 넓어지는 방향과, 그 시기 조선에서 먼저 필요했던 과제는 서로 다른 질문이라는 점을 구분하도록 안내합니다.</p>
+  </div>
+</section>
+
+<!-- 7 좌우 통합 배경 -->
+<section class="slide" aria-label="좌우 통합의 배경">
+  <div class="inner">
+    <h2>임시정부는 두 흐름을 하나의 정부 아래 묶어야 했다</h2>
+    <div class="cols">
+      <div class="col">
+        <h3>자본주의 국가 건설을 지향한 흐름</h3>
+        <p>자유 선거, 사유재산, 시장을 강조했다.</p>
+      </div>
+      <div class="col r">
+        <h3>사회주의적 경제 개혁을 지향한 흐름</h3>
+        <p>토지와 주요 산업의 공유, 계급 격차 해소를 강조했다.</p>
+      </div>
+    </div>
+    <p class="step">삼균주의는 두 흐름이 강조한 가치를 정치, 경제, 교육 세 영역의 제도로 나누어 적은 구상이다.</p>
+    <p class="step">이후 1942년에 조선의용대가 한국광복군에 합류하고, 1944년에는 좌파 인사가 임시정부에 참여한다.</p>
+  </div>
+  <div class="narr">
+    <p>좌우 통합이라는 말의 배경입니다. 1930년대와 1940년대 독립운동 진영에는 두 흐름이 있었습니다. 한쪽은 자유 선거와 사유재산과 시장을 강조하며 자본주의 국가 건설을 지향했고, 다른 쪽은 토지와 주요 산업의 공유와 계급 격차 해소를 강조하며 사회주의적 경제 개혁을 지향했습니다.</p>
+    <p>임시정부는 독립운동 전체를 대표하는 정부가 되려면 이 두 흐름을 하나의 정부 아래 묶어야 했습니다.</p>
+    <p>삼균주의는 두 흐름이 강조한 가치를 정치, 경제, 교육 세 영역의 제도로 나누어 적은 구상입니다. 이후 1942년에 조선의용대가 한국광복군에 합류하고, 1944년에는 좌파 인사가 임시정부에 참여합니다.</p>
+    <p>우파와 좌파라는 표현은 당시 두 흐름을 가리키는 수업용 구분이라는 점을 짚어 둡니다.</p>
+  </div>
+</section>
+
+<!-- 8 좌우 통합 구조 -->
+<section class="slide" aria-label="좌우 통합의 구조">
+  <div class="inner">
+    <h2>두 흐름이 강조한 가치와 삼균주의의 접점</h2>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th></th><th>우파가 강조한 가치</th><th>좌파가 강조한 가치</th><th>삼균주의의 접점</th></tr></thead>
+      <tbody>
+        <tr class="step d-pol"><td class="dm">정치</td><td>자유 선거, 민주공화정</td><td>민중의 정치 참여</td><td class="join">보통선거, 민주공화국</td></tr>
+        <tr class="step d-eco"><td class="dm">경제</td><td>사유재산, 시장</td><td>토지와 주요 산업의 공유</td><td class="join">대생산기관과 토지는 국유, 소규모 경영은 민영</td></tr>
+        <tr class="step d-edu"><td class="dm">교육</td><td>국민 교육</td><td>계급 격차 해소</td><td class="join">국비 의무교육</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note" style="margin-top:1em">우파·좌파는 당시 두 흐름을 가리키는 수업용 구분이다.</p>
+  </div>
+  <div class="narr">
+    <p>두 흐름이 강조한 가치와 삼균주의의 접점을 영역별로 봅니다. 한 줄씩 공개합니다.</p>
+    <p>정치에서는 우파가 자유 선거와 민주공화정을, 좌파가 민중의 정치 참여를 강조했습니다. 접점은 보통선거와 민주공화국입니다.</p>
+    <p>경제에서는 우파가 사유재산과 시장을, 좌파가 토지와 주요 산업의 공유를 강조했습니다. 접점은 대생산기관과 토지는 국유로 하고 소규모 경영은 민영으로 두는 구분입니다. 통합이 두 이념의 절반씩을 섞은 것이 아니라 무엇을 공유하고 무엇을 사유로 둘 것인가를 나눈 설계였다는 점을 이 줄에서 확인합니다.</p>
+    <p>교육에서는 국민 교육과 계급 격차 해소가 만나 국비 의무교육이 됩니다.</p>
+  </div>
+</section>
+
+<!-- 9 무엇이 균등인가 + 한계 -->
+<section class="slide" aria-label="균등의 의미와 한계">
+  <div class="inner">
+    <h2>삼균주의가 말하는 균등의 범위와 한계</h2>
+    <div class="pos">
+      <b>이 수업의 해석.</b> 삼균주의는 결과를 같게 만드는 주의가 아니라 정치, 경제, 교육의 제도를 고르게 하는 주의로 읽는다.
+    </div>
+    <p class="ask step">이 해석을 시험해 보자. 토지 국유는 출발선의 균등인가, 결과의 조정인가.</p>
+    <ul class="limits step">
+      <li>건국강령은 독립 이후를 위한 구상 문서였고, 그 내용이 그대로 시행된 것은 아니다.</li>
+      <li>통합의 문서가 나온 뒤에도 독립운동 진영의 이념 대립은 이어졌다.</li>
+    </ul>
+  </div>
+  <div class="narr">
+    <p>삼균주의가 말하는 균등이 무엇을 뜻하는지 정리합니다. 이 수업은 삼균주의를 결과를 같게 만드는 주의가 아니라 정치, 경제, 교육의 제도를 고르게 하는 주의로 읽습니다. 이것은 이 수업의 해석입니다.</p>
+    <p>이 해석을 시험하는 질문을 던집니다. 토지 국유는 출발선의 균등일까요, 결과의 조정일까요. 학생 사이에서 답이 갈리면 그대로 둡니다. 토지를 국유로 한다는 조항은 해석에 따라 두 방향으로 읽힐 수 있고, 학생이 그 근거를 스스로 말하는 것이 목적입니다.</p>
+    <p>한계도 두 가지 확인합니다. 건국강령은 독립 이후를 위한 구상 문서였고, 그 내용이 그대로 시행된 것은 아닙니다. 그리고 통합의 문서가 나온 뒤에도 독립운동 진영의 이념 대립은 이어졌습니다.</p>
+  </div>
+</section>
+
+<!-- 10 제헌 헌법 대응표 -->
+<section class="slide" aria-label="건국강령과 제헌 헌법의 대응">
+  <div class="inner">
+    <h2>건국강령과 제헌 헌법을 영역별로 놓고 보면</h2>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th></th><th>건국강령(1941)</th><th>제헌 헌법(1948)</th></tr></thead>
+      <tbody>
+        <tr class="step d-pol"><td class="dm">정치</td><td>보통선거</td><td>국민 주권. 제8조는 정치·경제·사회·문화의 모든 영역에서 차별을 금지한다.</td></tr>
+        <tr class="step d-eco"><td class="dm">경제</td><td>토지와 대생산기관의 국유</td><td>사회정의에 기초한 경제 질서(제84조), 주요 자원의 국유와 주요 기업의 국영·공영(제85~88조), 농지의 농민 분배(제86조), 근로자의 이익 균점(제18조)</td></tr>
+        <tr class="step d-edu"><td class="dm">교육</td><td>국비 의무교육</td><td>모든 국민의 균등한 교육받을 권리, 초등교육의 의무와 무상(제16조)</td></tr>
+        <tr class="step"><td class="dm" style="--c:var(--ink)">통합</td><td>좌우 이념의 접점</td><td>전문: 정치·경제·사회·문화의 모든 영역에서 각인의 기회를 균등히 한다.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note" style="margin-top:1em">조문 번호와 문구는 수업 전에 원문과 대조한다.</p>
+  </div>
+  <div class="narr">
+    <p>건국강령과 제헌 헌법을 영역별로 나란히 놓습니다. 한 줄씩 공개합니다.</p>
+    <p>정치입니다. 건국강령의 보통선거에 대응하는 제헌 헌법의 내용은 국민 주권과 제8조입니다. 제8조는 정치, 경제, 사회, 문화의 모든 영역에서 차별을 받지 않는다고 규정합니다.</p>
+    <p>경제입니다. 건국강령이 토지와 대생산기관의 국유를 제시했다면, 제헌 헌법은 사회정의에 기초한 경제 질서, 주요 자원의 국유와 주요 기업의 국영과 공영, 농지의 농민 분배, 근로자의 이익 균점을 규정합니다. 시장을 인정하면서 국가가 개입하는 범위를 조문으로 적은 구조입니다.</p>
+    <p>교육입니다. 모든 국민이 균등하게 교육받을 권리를 가지고, 초등교육은 의무이며 무상입니다.</p>
+    <p>마지막 줄은 전문입니다. 정치, 경제, 사회, 문화의 모든 영역에서 각인의 기회를 균등히 한다는 문장이 들어 있습니다.</p>
+    <p>조문 번호와 문구는 수업 전에 원문과 대조했다는 점을 학생에게도 알려 줍니다.</p>
+  </div>
+</section>
+
+<!-- 11 연결 고리와 근거의 한계 -->
+<section class="slide" aria-label="연결 고리와 근거의 한계">
+  <div class="inner">
+    <h2>제헌 헌법은 삼균주의를 어떻게 이어받았는가</h2>
+    <ul class="limits tight">
+      <li>전문은 3·1운동으로 대한민국을 건립했다는 독립정신을 계승한다고 밝힌다.</li>
+      <li>전문과 제8조가 말하는 모든 영역의 기회 균등은 삼균주의의 세 영역 균등과 구조가 같다.</li>
+      <li>제84~88조는 시장 경제를 두면서 국가 개입의 범위를 밝힌다. 건국강령의 국유와 사유의 구분과 방향이 같다.</li>
+    </ul>
+    <div class="pos step">
+      <b>이 수업의 입장.</b> 제헌 헌법은 삼균주의를 옮겨 적은 문서가 아니라, 같은 방향의 제도를 담은 문서이다.
+    </div>
+    <ul class="limits tight step">
+      <li>조소앙이 헌법 기초에 직접 참여한 기록은 확인되지 않는다. 기초는 유진오 등이 맡았고, 바이마르 헌법 등 다른 계보의 영향도 함께 논의된다.</li>
+      <li>제헌 헌법 전문에는 임시정부의 법통이라는 표현이 없다. 이 표현은 1987년 개정 헌법 전문에 들어간다.</li>
+    </ul>
+  </div>
+  <div class="narr">
+    <p>연결 고리를 세 가지로 정리합니다. 첫째, 제헌 헌법 전문은 3·1운동으로 대한민국을 건립했다는 독립정신을 계승한다고 밝힙니다. 둘째, 전문과 제8조가 말하는 모든 영역의 기회 균등은 삼균주의의 세 영역 균등과 구조가 같습니다. 셋째, 제84조부터 제88조까지는 시장 경제를 두면서 국가 개입의 범위를 밝히는데, 이는 건국강령의 국유와 사유의 구분과 방향이 같습니다.</p>
+    <p>이 수업의 입장을 공개합니다. 제헌 헌법은 삼균주의를 옮겨 적은 문서가 아니라, 같은 방향의 제도를 담은 문서입니다.</p>
+    <p>이 입장에는 근거의 한계가 붙습니다. 조소앙이 헌법 기초에 직접 참여한 기록은 확인되지 않습니다. 기초는 유진오 등이 맡았고, 바이마르 헌법 등 다른 계보의 영향도 함께 논의됩니다. 또 제헌 헌법 전문에는 임시정부의 법통이라는 표현이 없고, 이 표현은 1987년 개정 헌법 전문에 들어갑니다.</p>
+    <p>그러므로 계승이라는 말을 쓰려면 전문의 문구와 조문의 유사성을 넘는 증거가 더 필요합니다. 이 판단이 다음 슬라이드의 마지막 질문으로 이어집니다.</p>
+  </div>
+</section>
+
+<!-- 12 발문 -->
+<section class="slide" aria-label="정리 발문">
+  <div class="inner">
+    <h2>오늘 각자 답해 볼 질문</h2>
+    <ol class="qs">
+      <li class="step">투표권이 모두에게 있어도 돈이 없어 정치 참여가 어렵다면, 정치 균등은 이루어졌다고 볼 수 있는가.</li>
+      <li class="step">교육 균등이 경제 균등의 뒤에 오지 않고 나란히 놓인 이유는 무엇인가.</li>
+      <li class="step">식민지 상태에서 개인 간 균등을 말할 수 있었는가. 민족 간 균등은 왜 출발 조건이 되는가.</li>
+      <li class="step">건국강령의 토지 국유와 제헌 헌법의 농지 분배는 같은가, 다른가. 무엇이 달라졌고 무엇이 남았는가.</li>
+      <li class="step">제헌 헌법이 삼균주의를 계승했다고 쓰려면 어떤 증거가 더 필요한가.</li>
+    </ol>
+  </div>
+  <div class="narr">
+    <p>오늘 각자 답해 볼 질문 다섯 개입니다. 하나씩 공개합니다.</p>
+    <p>첫째와 둘째는 삼균주의가 세 영역을 함께 다룬 이유를 학생이 자기 말로 다시 세우는 질문입니다. 셋째는 민족 간 균등이 출발 조건이 되는 이유를 묻습니다. 넷째는 건국강령과 제헌 헌법을 비교해 무엇이 달라졌고 무엇이 남았는지 찾게 합니다.</p>
+    <p>다섯째가 오늘의 도착점입니다. 제헌 헌법이 삼균주의를 계승했다고 쓰려면 어떤 증거가 더 필요한가. 앞 슬라이드에서 확인한 근거의 한계를 학생이 스스로 찾아 문장으로 쓰도록 합니다. 다섯 질문 가운데 하나를 골라 200자 안팎으로 써서 제출하도록 안내합니다.</p>
+  </div>
+</section>
+
+<!-- 13 원문 확인 -->
+<section class="slide" aria-label="원문 확인처">
+  <div class="inner">
+    <h2>원문 확인처</h2>
+    <ul class="limits">
+      <li>제헌 헌법(1948년 7월 17일 공포): 국가법령정보센터의 헌법 연혁</li>
+      <li>대한민국 임시정부 건국강령(1941년 11월): 국사편찬위원회 한국사데이터베이스</li>
+      <li>조소앙과 삼균주의: 한국사 교과서 해당 단원과 독립기념관 자료</li>
+    </ul>
+    <p class="note" style="margin-top:1.2em">조문 번호와 인용 문구는 수업 전에 위 원문과 대조한다.</p>
+  </div>
+  <div class="narr">
+    <p>수업에서 쓴 조문과 문구는 이 원문에서 확인할 수 있습니다. 제헌 헌법은 국가법령정보센터의 헌법 연혁에서, 건국강령은 국사편찬위원회 한국사데이터베이스에서 찾습니다. 조소앙과 삼균주의는 교과서의 해당 단원과 독립기념관 자료를 함께 봅니다.</p>
+    <p>학생이 답을 쓸 때 자기 주장의 근거가 어느 원문에 있는지 표시하도록 안내하면서 수업을 마칩니다.</p>
+  </div>
+</section>
+
+</main>
+
+<div id="notes" aria-live="polite"><div class="nh">나레이션</div><div id="notes-body"></div></div>
+
+<nav id="bar" aria-label="슬라이드 이동">
+  <button id="prev" type="button">이전</button>
+  <button id="next" type="button">다음</button>
+  <span id="count">1 / 13</span>
+  <span class="sp"></span>
+  <button id="tnotes" type="button" aria-pressed="false">나레이션</button>
+  <button id="ttheme" type="button">화면 색</button>
+</nav>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var notesBody = document.getElementById('notes-body');
+  var count = document.getElementById('count');
+  var cur = 0;
+
+  function stepsOf(i){ return Array.prototype.slice.call(slides[i].querySelectorAll('.step')); }
+
+  function show(i, all){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function(s, k){ s.classList.toggle('active', k === cur); });
+    stepsOf(cur).forEach(function(e){ e.classList.toggle('on', !!all); });
+    slides[cur].scrollTop = 0;
+    var narr = slides[cur].querySelector('.narr');
+    notesBody.innerHTML = narr ? narr.innerHTML : '';
+    count.textContent = (cur + 1) + ' / ' + slides.length;
+    try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) {}
+  }
+
+  function next(){
+    var hidden = stepsOf(cur).filter(function(e){ return !e.classList.contains('on'); });
+    if (hidden.length) {
+      var g = hidden[0].getAttribute('data-g');
+      hidden[0].classList.add('on');
+      if (g) hidden.slice(1).forEach(function(e){ if (e.getAttribute('data-g') === g) e.classList.add('on'); });
+    } else if (cur < slides.length - 1) {
+      show(cur + 1, false);
+    }
+  }
+  function prev(){
+    var on = stepsOf(cur).filter(function(e){ return e.classList.contains('on'); });
+    if (on.length) {
+      var last = on[on.length - 1];
+      var g = last.getAttribute('data-g');
+      last.classList.remove('on');
+      if (g) on.slice(0, -1).forEach(function(e){ if (e.getAttribute('data-g') === g) e.classList.remove('on'); });
+    } else if (cur > 0) {
+      show(cur - 1, true);
+      var st = stepsOf(cur - 0);
+      if (st.length) {
+        var lastEl = st[st.length - 1], gg = lastEl.getAttribute('data-g');
+        lastEl.classList.remove('on');
+        if (gg) st.forEach(function(e){ if (e.getAttribute('data-g') === gg) e.classList.remove('on'); });
+      }
+    }
+  }
+
+  document.getElementById('next').addEventListener('click', next);
+  document.getElementById('prev').addEventListener('click', prev);
+
+  var tn = document.getElementById('tnotes');
+  function toggleNotes(){
+    var on = document.body.classList.toggle('show-notes');
+    tn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  tn.addEventListener('click', toggleNotes);
+
+  var root = document.documentElement;
+  document.getElementById('ttheme').addEventListener('click', function(){
+    var dark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    root.setAttribute('data-theme', dark ? 'light' : 'dark');
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.target && e.target.tagName === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { show(0, false); }
+    else if (e.key === 'End') { show(slides.length - 1, true); }
+    else if (e.key === 'n' || e.key === 'N') { toggleNotes(); }
+  });
+
+  var sx = null;
+  document.getElementById('stage').addEventListener('touchstart', function(e){ sx = e.touches[0].clientX; }, {passive:true});
+  document.getElementById('stage').addEventListener('touchend', function(e){
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx; sx = null;
+    if (dx < -60) next(); else if (dx > 60) prev();
+  }, {passive:true});
+
+  var start = parseInt((location.hash || '').replace('#', ''), 10);
+  show(isNaN(start) ? 0 : start - 1, false);
+})();
+</script>
+</body>
+</html>

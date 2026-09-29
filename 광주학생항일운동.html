@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>광주학생항일운동</title>
+<style>
+:root{--bg:#15181f;--fg:#e9ecf2;--sub:#98a2b6;--ac:#7ea6f0}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:"Noto Sans KR","Malgun Gothic",system-ui,sans-serif}
+body{display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:14px;padding:10px 16px;font-size:14px}
+header a,header button{color:var(--ac);text-decoration:none;white-space:nowrap;background:none;border:0;font:inherit;cursor:pointer;padding:0}
+header b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+#scroll{flex:1;min-height:0;overflow-y:auto;padding:0 12px 40px}
+#scroll img{display:block;width:100%;max-width:1100px;height:auto;margin:0 auto 14px;background:#222}
+#stage{flex:1;min-height:0;display:none;align-items:center;justify-content:center;position:relative;touch-action:pan-y}
+#stage img{max-width:100%;max-height:100%;object-fit:contain;user-select:none}
+.nav{position:absolute;top:0;bottom:0;width:22%;border:0;background:none;cursor:pointer;color:#fff;font-size:34px;opacity:0;transition:opacity .15s}
+.nav:hover,.nav:focus-visible{opacity:.7;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent)}
+#prev{left:0}#next{right:0;transform:scaleX(-1)}
+footer{display:none;align-items:center;gap:12px;padding:10px 16px}
+input[type=range]{flex:1;accent-color:var(--ac)}
+#pg{font-size:14px;color:var(--sub);min-width:64px;text-align:right}
+body.slide #scroll{display:none}
+body.slide #stage{display:flex}
+body.slide footer{display:flex}
+#count{color:var(--sub);font-size:13px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+</style></head><body>
+<header><a href="../index.html">← 자료실</a><b>광주학생항일운동</b><span id="count"></span>
+<button id="mode">한 쪽씩 보기</button><button id="fs">전체화면</button></header>
+<div id="scroll"></div>
+<div id="stage">
+<button class="nav" id="prev" aria-label="이전 페이지">&#10094;</button>
+<img id="img" alt="">
+<button class="nav" id="next" aria-label="다음 페이지">&#10094;</button>
+</div>
+<footer><input type="range" id="bar" min="1" value="1" aria-label="페이지 이동"><span id="pg"></span></footer>
+<script>
+const DIR="%EA%B4%91%EC%A3%BC%ED%95%99%EC%83%9D%ED%95%AD%EC%9D%BC%EC%9A%B4%EB%8F%99_files", N=13, W=1600, H=894;
+const src=n=>DIR+"/"+String(n).padStart(3,"0")+".webp";
+const $=id=>document.getElementById(id);
+let i=1, slide=false;
+
+/* 스크롤 보기 */
+const sc=$("scroll");
+for(let n=1;n<=N;n++){
+  const im=document.createElement("img");
+  im.src=src(n); im.alt=n+"쪽"; im.dataset.n=n;
+  im.style.aspectRatio=W+"/"+H;
+  if(n>2)im.loading="lazy";
+  sc.appendChild(im);
+}
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){i=Number(e.target.dataset.n);$("count").textContent=i+" / "+N}
+}),{root:sc,threshold:.5});
+sc.querySelectorAll("img").forEach(im=>io.observe(im));
+$("count").textContent="1 / "+N;
+
+/* 한 쪽씩 보기 */
+const bar=$("bar"); bar.max=N;
+function show(n){
+  i=Math.min(N,Math.max(1,n));
+  $("img").src=src(i); $("img").alt=i+"쪽";
+  bar.value=i; $("pg").textContent=i+" / "+N;
+  [i+1,i+2].forEach(k=>{if(k<=N)new Image().src=src(k)});
+}
+function setMode(s){
+  slide=s;
+  document.body.classList.toggle("slide",s);
+  $("count").style.display=s?"none":"";
+  $("mode").textContent=s?"스크롤 보기":"한 쪽씩 보기";
+  if(s)show(i);
+  else sc.querySelector('img[data-n="'+i+'"]').scrollIntoView();
+}
+$("mode").onclick=()=>setMode(!slide);
+$("prev").onclick=()=>show(i-1);
+$("next").onclick=()=>show(i+1);
+bar.oninput=()=>show(Number(bar.value));
+$("fs").onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();
+addEventListener("keydown",e=>{
+  if(!slide)return;
+  if(["ArrowRight","PageDown"," "].includes(e.key)){e.preventDefault();show(i+1)}
+  if(["ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();show(i-1)}
+  if(e.key==="Home")show(1); if(e.key==="End")show(N);
+});
+let x0=null;
+$("stage").addEventListener("touchstart",e=>{x0=e.touches[0].clientX},{passive:true});
+$("stage").addEventListener("touchend",e=>{if(x0===null)return;const d=e.changedTouches[0].clientX-x0;if(Math.abs(d)>50)show(i+(d<0?1:-1));x0=null});
+</script></body></html>
