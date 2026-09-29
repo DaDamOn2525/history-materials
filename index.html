@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>일제강점기 민족운동 수업 자료실</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f4f7; --panel:#fff; --ink:#1b2438; --sub:#5b6577; --line:#d5dae3;
+  --accent:#1f4b99; --pdf:#b3261e; --web:#0f6b5c; --hi:#e8eefb;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#121722;--panel:#1a2130;--ink:#e7ebf3;--sub:#9aa5ba;--line:#2b3448;--accent:#7ea6f0;--pdf:#f0847c;--web:#5fc9b4;--hi:#232d45}
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:120px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,"Malgun Gothic",sans-serif;line-height:1.6}
+header{padding:48px 20px 28px;max-width:860px;margin:0 auto}
+h1{font-family:"Noto Serif KR",Batang,serif;font-weight:900;font-size:clamp(28px,6vw,44px);line-height:1.25;margin:0 0 10px;letter-spacing:-.02em}
+header p{margin:0;color:var(--sub);max-width:60ch}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 20px}
+.bar-in{max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+input[type=search]{flex:1 1 220px;padding:10px 14px;font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px}
+input[type=search]:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.chips{display:flex;gap:6px}
+.chips button{font:inherit;font-size:14px;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+#count{font-size:13px;color:var(--sub);margin-left:auto}
+main{max-width:860px;margin:0 auto;padding:12px 20px 80px}
+section{display:grid;grid-template-columns:110px 1fr;gap:0 22px;padding:26px 0}
+section[hidden]{display:none}
+.era{position:relative;padding-right:18px;border-right:3px solid var(--accent)}
+.era b{display:block;font-family:"Noto Serif KR",serif;font-size:22px;line-height:1.2}
+.era span{font-size:13px;color:var(--sub)}
+ul{list-style:none;margin:0;padding:0}
+li{border-bottom:1px solid var(--line)}
+li:first-child{border-top:1px solid var(--line)}
+li[hidden]{display:none}
+a{display:flex;gap:12px;align-items:baseline;padding:12px 8px;color:var(--ink);text-decoration:none}
+a:hover{background:var(--hi)}
+.tag{flex:none;font-size:12px;font-weight:700;padding:1px 8px;border-radius:4px;border:1px solid currentColor}
+.tag.slide{color:var(--pdf)}
+.tag.html{color:var(--web)}
+.t{word-break:keep-all}
+#empty{display:none;text-align:center;color:var(--sub);padding:60px 0}
+@media (max-width:640px){
+  section{grid-template-columns:1fr;gap:10px}
+  .era{border-right:0;border-bottom:3px solid var(--accent);padding:0 0 6px}
+  .era b,.era span{display:inline;margin-right:8px}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>일제강점기 민족운동<br>수업 자료실</h1>
+  <p>수업 이해를 돕기 위한 자료 모음입니다. 시기별로 정리했고, 제목을 누르면 새 창에서 열립니다. 검색창에 키워드를 입력해 찾을 수도 있습니다.</p>
+</header>
+
+<div class="bar">
+  <div class="bar-in">
+    <input type="search" id="q" placeholder="자료 검색 (예: 의열단, 카이로)" aria-label="자료 검색">
+    <div class="chips" role="group" aria-label="파일 종류">
+      <button data-f="all" aria-pressed="true">전체</button>
+      <button data-f="slide" aria-pressed="false">슬라이드</button>
+      <button data-f="html" aria-pressed="false">웹 자료</button>
+    </div>
+    <span id="count" aria-live="polite"></span>
+  </div>
+</div>
+
+<main id="list"></main>
+<p id="empty">검색 결과가 없습니다. 다른 키워드로 검색해 보세요.</p>
+
+<script>
+/* ===== 자료 목록 =====
+   [파일명(확장자 제외), 종류(slide|html), 시기 코드]
+   slide = PDF에서 변환한 자료, html = 원래 웹 자료. 둘 다 html/ 폴더 안의 실제 파일명과 같아야 합니다.
+   표시 제목은 파일명의 _ 를 공백으로 바꿔 자동 생성됩니다.
+   제목을 따로 쓰려면 4번째 값에 적으세요. */
+const ERAS = {
+  a:["1910년대","무단통치 · 3·1 운동"],
+  b:["1920년대","무장투쟁 · 실력양성 · 사회운동"],
+  c:["1930~40년대","전시체제 · 독립운동 세력"],
+  d:["종합·개념","사상 · 도표 · 개념어"]
+};
+const DATA = [
+  ["1910년대 경무총감과 정무총감을 둔 의도","slide","a"],
+  ["일제가 경무총감과 정무총감으로 분리하여 운영한 의도","slide","a"],
+  ["1910년대 민족 독립 운동","slide","a"],
+  ["제1차 세계 대전과 러시아 혁명","slide","a"],
+  ["제1차 세계대전이 소련과 일본에 끼친 영향","slide","a"],
+  ["민족자결주의 - 왜 국가자결주의가 아니었는가","slide","a"],
+  ["민족자결주의와 여운형_그리고 31운동","slide","a"],
+  ["민족자결주의와 여운형_그리고 확산","slide","a"],
+  ["31운동_미시사 포함","slide","a"],
+  ["강우규 의거","slide","a"],
+
+  ["1921년 부산 노동자 파업의 의의","html","b"],
+  ["1920년대 만주 일대 독립 운동","slide","b"],
+  ["이회영 등 만주 연해주 독립운동 기지 설립 미시사","slide","b"],
+  ["봉오동 청산리 전투의 이해","slide","b"],
+  ["봉오동_청산리_미시사_DB-1","slide","b"],
+  ["3부 성립과 변화","slide","b"],
+  ["의열단_Shouts_of_Freedom_(2)","slide","b"],
+  ["의열단_미시사 다큐","slide","b"],
+  ["610만세 운동_1926","slide","b"],
+  ["광주학생항일운동","slide","b"],
+  ["나운규의 아리랑과 1920년대","slide","b"],
+  ["일본 수평사와 조선형평사","slide","b"],
+  ["심훈의 상록수를 있게했던 교육자 최용신","slide","b"],
+  ["원산총파업_탄압의도","html","b"],
+
+  ["농촌진흥운동과 조선 소작 조정령 및 조선 농지령","html","c"],
+  ["일제가 일으킨 중일 전쟁 이후 강제 한국인 동원","slide","c"],
+  ["일제의 일본식 씨와 이름 강요(창씨개명) 실체와 민족의 사투","slide","c"],
+  ["1930년대와 1940년대 독립 운동 세력의 이합집산","html","c"],
+  ["김원봉의 임정 참여 배경이 되는 국제 정세","slide","c"],
+  ["대한민국임시정부의 제2차 세계 대전에 대한 대응","html","c"],
+  ["한국광복군, 연합국 일원으로 활약 및 독수리 작전과 좌절","slide","c"],
+  ["냅코 프로젝트 - 한국민족문화대백과사전","slide","c"],
+  ["NAPKO 작전","slide","c"],
+  ["카이로 선언에서 적당한 시기(절차)란","html","c"],
+  ["카이로 선언의 적당한 시기에","html","c"],
+
+  ["Ⅱ-1_일제강점기와_민족운동_통합요약도표","html","d"],
+  ["개념어사전_수업앱_프로토타입","html","d"],
+  ["사회주의와 공산주의 비교_board","html","d"],
+  ["이당치국과_한국독립운동_전자칠판 (2)","html","d"],
+  ["조소앙의 삼균주의 수업 슬라이드 (Copy)","html","d"],
+  ["정답 그 너머에_왜 그럴까라는 물음이 있다","slide","d"]
+];
+
+const list = document.getElementById("list");
+const q = document.getElementById("q");
+const count = document.getElementById("count");
+const empty = document.getElementById("empty");
+let filter = "all";
+
+/* 화면 만들기 */
+Object.keys(ERAS).forEach(k => {
+  const sec = document.createElement("section");
+  sec.innerHTML = '<div class="era"><b>'+ERAS[k][0]+'</b><span>'+ERAS[k][1]+'</span></div><ul></ul>';
+  const ul = sec.querySelector("ul");
+  DATA.filter(d => d[2] === k).forEach(d => {
+    const title = d[3] || d[0].replace(/_/g, " ");
+    const li = document.createElement("li");
+    li.dataset.type = d[1];
+    li.dataset.text = (title + " " + d[0]).toLowerCase();
+    const a = document.createElement("a");
+    a.href = "html/" + encodeURIComponent(d[0]) + ".html";
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.innerHTML = '<span class="tag '+d[1]+'">'+(d[1]==="slide"?"슬라이드":"웹")+'</span><span class="t"></span>';
+    a.querySelector(".t").textContent = title;
+    li.appendChild(a);
+    ul.appendChild(li);
+  });
+  list.appendChild(sec);
+});
+
+/* 검색·필터 */
+function apply(){
+  const term = q.value.trim().toLowerCase();
+  let shown = 0;
+  list.querySelectorAll("section").forEach(sec => {
+    let n = 0;
+    sec.querySelectorAll("li").forEach(li => {
+      const ok = (filter === "all" || li.dataset.type === filter) && li.dataset.text.includes(term);
+      li.hidden = !ok;
+      if (ok) n++;
+    });
+    sec.hidden = n === 0;
+    shown += n;
+  });
+  count.textContent = "자료 " + shown + "개";
+  empty.style.display = shown ? "none" : "block";
+}
+q.addEventListener("input", apply);
+document.querySelectorAll(".chips button").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.f;
+  document.querySelectorAll(".chips button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  apply();
+}));
+apply();
+</script>
+</body>
+</html>
